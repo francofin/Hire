@@ -1,6 +1,6 @@
 const db = require('../config/connection');
 const faker = require('faker');
-const { Category, Product, User, Employer, Jobs } = require('../models');
+const { Category, Product, User, Employer, Jobs, Profile } = require('../models');
 
 db.once('open', async () => {
     await Category.deleteMany();
@@ -131,8 +131,20 @@ db.once('open', async () => {
     }
 
     //Create Profile Data
+    let createdprofiles = [];
     for(let i=0; i<createdUsers.ops.length; i+=1) {
         const profiletext = faker.lorem.paragraphs();
+        const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
+        const image = faker.image.people();
+        const { email, _id: userId } = createdUsers.ops[randomUserIndex];
+
+        const createdProfile = await Profile.create({profiletext, image, email});
+        
+        const updatedUserProfile = await User.updateOne(
+            {_id: userId},
+            {$push: {profile: createdProfile._id}}
+        );
+            createdprofiles.push(createdProfile);
     }
 
     // //create candidates

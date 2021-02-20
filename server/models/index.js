@@ -5,6 +5,7 @@ const Order = require('./Order');
 const Product = require('./Product');
 const Profile = require('./Profile');
 const User = require('./User');
+const Images = require('./Images');
 
 
-module.exports = { Category, Employer, Jobs, Order, Product, Profile, User};
+module.exports = { Category, Employer, Jobs, Order, Product, Profile, User, Images};

@@ -18,9 +18,12 @@ const profileSchema = new Schema(
       type: String,
       required: true
     },
-    image: {
-        type: String
-      },
+    image: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Images'
+      }
+    ],
   },
   {
     toJSON: {

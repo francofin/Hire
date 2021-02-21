@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
-const interestSchema = require('./Interested');
 const {
   Schema
 } = mongoose;

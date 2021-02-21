@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 
 const interestSchema = new Schema(
@@ -23,5 +23,7 @@ const interestSchema = new Schema(
     }
   }
 );
+
+
 
 module.exports = interestSchema;

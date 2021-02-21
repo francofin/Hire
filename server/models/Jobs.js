@@ -4,12 +4,7 @@ const interestSchema = require('./Interested');
 const { Schema } = mongoose;
 
 const jobSchema = new Schema({
-  companyName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  role: {
+  email: {
     type: String,
     required: true,
     trim: true
@@ -29,11 +24,16 @@ const jobSchema = new Schema({
   image: {
     type: String
   },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
+  positionFilled: {
+    type: Boolean, 
+    required: true,
+    default: false
   },
+  skills: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Skills',
+    required: true
+  }],
   interests: [interestSchema]
 },
   {

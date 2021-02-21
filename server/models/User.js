@@ -26,10 +26,23 @@ const userSchema = new Schema({
     required: true,
     minlength: 8
   },
-  profile: {
-    type: Schema.Types.ObjectId,
-    ref: 'Profile'
+  profileText: {
+    type: String,
+    required: 'Please Create Your Profile',
+    minlength: 300,
+    maxlength: 280000
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: timestamp => dateFormat(timestamp)
+  },
+  image: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Images'
+    }
+  ],
   orders: [Order.schema],
   interested_jobs: [
     {
@@ -43,12 +56,17 @@ const userSchema = new Schema({
       ref: 'Jobs'
     }
   ],
-  nonmatched_jobs: [
+  jobs: [
     {
-      type: Schema.Types.ObjectId,
-      ref: 'jobs',
+        type: Schema.Types.ObjectId,
+        ref: 'Jobs'
     }
-  ],
+],
+skills: [{
+  type: Schema.Types.ObjectId,
+  ref: 'Skills',
+  required: true
+}]
 });
 
 // set up pre-save middleware to create password
@@ -66,16 +84,20 @@ userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.virtual('jobCount').get(function () {
+userSchema.virtual('interestedJobCount').get(function () {
   return this.interested_jobs.length;
 });
 
-userSchema.virtual('matchedJobs').get(function () {
+userSchema.virtual('skillCount').get(function () {
+  return this.skills.length;
+});
+
+userSchema.virtual('matchedJobCount').get(function () {
   return this.matched_jobs.length;
 });
 
-userSchema.virtual('nonnmatchedJobs').get(function () {
-  return this.nonmatched_jobs.length;
+userSchema.virtual('jobsCount').get(function () {
+  return this.jobs.length;
 });
 
 const User = mongoose.model('User', userSchema);

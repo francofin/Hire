@@ -12,15 +12,13 @@ const typeDefs = gql`
         createdAt: String
         image: String
         skills: [Skills]
-        interestCount: Int
-        interests: [Interested]
-    }
-
-    type Interested {
-        _id: ID
-        email: String
-        createdAt: String
-        interestShown: Boolean
+        userInterestCount: Int
+        candidateCount: Int
+        matchCount: Int
+        applicants: [User]
+        candidates: [User]
+        matchedCandidates: [User]
+        
     }
 
     type User {
@@ -30,19 +28,20 @@ const typeDefs = gql`
         email: String
         profileText: String
         image: [Image]
-        interestedJobs: [Jobs]
+        applied: [Jobs]
+        jobOffers: [Jobs]
         matchedJobs:[Jobs]
         skills: [Skills]
         jobs: [Jobs]
         jobCount: Int
-        interestedJobCount: Int
+        offerCount: Int
         matchedJobCount: Int
+        applicantCount: Int
         skillCount: Int
         orders: Order
     }
 
     
-
     type Order {
         _id: ID
         purchaseDate: String
@@ -90,8 +89,8 @@ const typeDefs = gql`
         loginUser(email: String!, password: String!): AuthUser
         addJob(email: String!, description: String!, image:String, skills:[String!]): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
-        showJobInterest(interestShown:Boolean): Interested
-        showUserInterest(interstShown:Boolean): Interested
+        showJobInterest(jobId:ID!): Jobs
+        showUserInterest(userId:ID!): User
         addOrder(product: ID!): Order
         singleUpload(file: Upload!): Image!
         uploads: [Image]

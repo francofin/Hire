@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+const mongoose = require('mongoose');u
 const { Schema, model } = mongoose;
 const bcrypt = require('bcrypt');
 const Order = require('./Order');
@@ -44,13 +43,19 @@ const userSchema = new Schema({
     }
   ],
   orders: [Order.schema],
-  interested_jobs: [
+  jobOffers: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Jobs'
     }
   ],
-  matched_jobs: [
+  applied: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Jobs'
+    }
+  ],
+  matchedJobs: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Jobs'
@@ -84,21 +89,22 @@ userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.virtual('interestedJobCount').get(function () {
-  return this.interested_jobs.length;
+userSchema.virtual('offerCount').get(function () {
+  return this.jobOffers.length;
+});
+
+userSchema.virtual('appliedCount').get(function () {
+  return this.applied.length;
+});
+
+userSchema.virtual('matchedJobCount').get(function () {
+  return this.matchedJobs.length;
 });
 
 userSchema.virtual('skillCount').get(function () {
   return this.skills.length;
 });
 
-userSchema.virtual('matchedJobCount').get(function () {
-  return this.matched_jobs.length;
-});
-
-userSchema.virtual('jobsCount').get(function () {
-  return this.jobs.length;
-});
 
 const User = mongoose.model('User', userSchema);
 

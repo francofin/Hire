@@ -102,20 +102,51 @@ db.once('open', async () => {
         jobData.push(createdJob);
     }
 
-    //create Interests
-    for (let i = 0; i < 100; i += 1) {
-        const interestShown = faker.random.boolean();
-        const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-        const { email } = createdUsers.ops[randomUserIndex];
-        const randomJobIndex = Math.floor(Math.random() * jobData.length);
-        const { _id: jobsId } = jobData[randomJobIndex];
-
+    // create Interests v2
+    for (let i = 0; i < 30; i += 1) {
+        const randomJobIndex = Math.floor(Math.random() * jobData.ops.length);
+        const { _id: jobId } = jobData.ops[randomJobIndex];
+        let interestId = jobId;
+        while (interestId === jobId){
+            const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
+            interestId = createdUsers.ops[randomUserIndex];
+        }
         await Jobs.updateOne(
-            { _id: jobsId },
-            { $push: { interests: { interestShown, email } } },
-            { runValidators: true }
-        );
+            {_id:jobId},
+            { $addToSet: {applicants:interestId}}          
+            )
     }
+
+     // create Interests v2
+     for (let i = 0; i < 30; i += 1) {
+        const randomUserIndex = Math.floor(Math.random() * userData.ops.length);
+        const { _id: userId } = userData.ops[randomUserIndex];
+        let interestId = userId;
+        while (interestId === userId){
+            const randomJobIndex = Math.floor(Math.random() * jobData.ops.length);
+            interestId = jobData.ops[randomJobIndex];
+        }
+        await User.updateOne(
+            {_id:userId},
+            { $addToSet: {jobOffers:interestId}}          
+            )
+    }
+
+
+    //create Interests
+    // for (let i = 0; i < 100; i += 1) {
+    //     const interestShown = faker.random.boolean();
+    //     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
+    //     const { email } = createdUsers.ops[randomUserIndex];
+    //     const randomJobIndex = Math.floor(Math.random() * jobData.length);
+    //     const { _id: jobsId } = jobData[randomJobIndex];
+
+    //     await Jobs.updateOne(
+    //         { _id: jobsId },
+    //         { $push: { interests: { interestShown, email } } },
+    //         { runValidators: true }
+    //     );
+    // }
 
 
     console.log('all done!');

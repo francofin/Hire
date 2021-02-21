@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Skills, Order, Jobs, Interested } = require('../models');
+const { User, Product, Skills, Order, Jobs,} = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')(Process.env.STRIPE);
 
@@ -28,22 +28,32 @@ const resolvers = {
 
       return await Jobs.find(params)
         .populate('skills')
-        .populate('interests')
+        .populate('applicants')
+        .populate('candidates')
+        .populate('matchedCandidates')
     },
 
     job: async (parent, { _id }) => {
       return await Jobs.findOne({ _id })
         .populate('skills')
-        .populate('interests')
+        .populate('applicants')
+        .populate('candidates')
+        .populate('matchedCandidates')
     },
 
     users: async () => {
       return User.find()
         .select('-__v -password')
+        .populate('jobOffers')
+        .populate('applied')
+        .populate('matchedJobs')
     },
     user: async (parent, { email }) => {
       return User.findOne({ email })
         .select('-__v -password')
+        .populate('jobOffers')
+        .populate('applied')
+        .populate('matchedJobs')
     },
     me: async (parent, args, context) => {
       if (context.user) {
@@ -51,7 +61,8 @@ const resolvers = {
           .select('-__v -password')
           .populate('jobs')
           .populate('skills')
-          .populate('interestedJobs')
+          .populate('jobOffers')
+          .populate('applied')
           .populate('matchedJobs')
           .populate('image')
           .populate('orders')
@@ -166,11 +177,11 @@ const resolvers = {
         return job;
       }
     },
-    showJobInterest: async (parent, {jobId, interestShown}, context) => {
+    showJobInterest: async (parent, {jobId}, context) => {
       if(context.user) {
         const updatedJob = await Jobs.findOneAndUpdate(
           {_id: jobId},
-          {$push: {interests: {interestShown, email:context.user.email}}},
+          {$addToSet: {applicants:context.user._id}},
           {new: true}
         );
         return updatedJob;
@@ -178,14 +189,15 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
-    showUserInterest: async (parent, {userId, interestShown}, context) => {
+    showUserInterest: async (parent, {userId}, context) => {
       if(context.user) {
-        const updatedJob = await Jobs.findOneAndUpdate(
-          {_id: jobId},
-          {$push: {interests: {interestShown, email:context.user.email}}},
+        const userPost = await User.findOne({email:context.user.email})
+        const updatedUser = await User.findOneAndUpdate(
+          {_id: userId},
+          {$addToSet: {jobOffers: jobId}},
           {new: true}
         );
-        return updatedJob;
+        return updatedUser;
       }
 
       throw new AuthenticationError('You need to be logged in!');

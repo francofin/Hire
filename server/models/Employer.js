@@ -5,16 +5,6 @@ const bcrypt = require('bcrypt');
 const Order = require('./Order');
 
 const employerSchema = new Schema({
-    firstName: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    lastName: {
-        type: String,
-        required: true,
-        trim: true
-    },
     companyName: {
         type: String,
         required: true,

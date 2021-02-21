@@ -14,6 +14,10 @@ const profileSchema = new Schema(
       default: Date.now,
       get: timestamp => dateFormat(timestamp)
     },
+    companyName: {
+      type:String,
+      required: false
+    },
     email: {
       type: String,
       required: true

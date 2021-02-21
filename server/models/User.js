@@ -31,16 +31,28 @@ const userSchema = new Schema({
     ref: 'Profile'
   },
   orders: [Order.schema],
-  jobs: [
+  interested_jobs: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Jobs'
     }
   ],
+  matched_jobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Jobs'
+    }
+  ],
+  nonmatched_jobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'jobs',
+    }
+  ],
 });
 
 // set up pre-save middleware to create password
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
@@ -50,13 +62,22 @@ userSchema.pre('save', async function(next) {
 });
 
 // compare the incoming password with the hashed password
-userSchema.methods.isCorrectPassword = async function(password) {
+userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.virtual('jobCount').get(function() {
-    return this.jobs.length;
-  });
+userSchema.virtual('jobCount').get(function () {
+  return this.interested_jobs.length;
+});
+
+userSchema.virtual('matchedJobs').get(function () {
+  return this.matched_jobs.length;
+});
+
+userSchema.virtual('nonnmatchedJobs').get(function () {
+  return this.nonmatched_jobs.length;
+});
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

@@ -59,7 +59,7 @@ const typeDefs = gql`
     }
 
     type Employer {
-        id:ID
+        _id:ID
         firstName: String
         lastName: String
         companyName: String
@@ -70,6 +70,13 @@ const typeDefs = gql`
         jobs: [Jobs]
         candidateCount: Int
         jobCount: Int
+    }
+
+    type Image {
+        _id:ID
+        name: String!
+        mimetype: String!
+        encoding: String!
     }
 
     type AuthUser {
@@ -96,17 +103,20 @@ const typeDefs = gql`
         product(_id: ID!): Product
         categories: [Category]
         userProfile(email:String!): Profile
+        employerProfile(companyName:String!): Profile
     }
 
     type Mutation {
         addUser(firstName: String!, lastName:String!, email:String!, password: String! ): AuthUser
         addEmployer(firstName: String!, lastName:String!, companyName: String!, email:String!, password: String!): AuthEmployer
         addOrder(product: ID!): Order
-        addProfile(profiletext: String!, email:String!, image:String!): Profile
-        addJob(companyName: String!, role:String!, description: String!, image:String!, category:String!): Jobs
+        addProfile(profiletext: String!, email:String!, companyName: String, image:[ID]): Profile
+        singleUpload(file: Upload!): Image!
+        addJob(companyName: String!, role:String!, description: String!, image:ID, category:String!): Jobs
         updateUser(firstName: String, lastName: String, email: String, password: String): User
         loginUser(email: String!, password: String!): AuthUser
         loginEmployer(email: String!, password: String!): AuthEmployer
+        uploads: [Image]
     }
 
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {Schema, model} = mongoose;
-const Pro
+
 
 const imageSchema = new Schema({
     name: {
@@ -13,7 +13,7 @@ const imageSchema = new Schema({
         trim: true
     },
     image: {
-        data: Buffer, 
+        data: String, 
         contentType: String
     },
 });

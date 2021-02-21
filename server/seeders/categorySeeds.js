@@ -49,7 +49,7 @@ db.once('open', async () => {
             name: 'Premium Employer Services',
             description:
                 "Premium Employer Services allow you to get the best candidates for your organization. Filter candidates by different requirements, get better matches \
-                for your roles, Use Hire's powerful matching algorithm to more efficiently find your ideal canaidate.",
+                for your roles, Use Hire's powerful matching algorithm to more efficiently find your ideal candidate.",
             image: 'employerproduct.jpg',
             price: 50.99,
             quantity: 1
@@ -63,60 +63,60 @@ db.once('open', async () => {
     //create User Data
     const userData = [];
 
-    for(let i = 0; i<50; i+=1) {
+    for (let i = 0; i < 50; i += 1) {
         const firstName = faker.name.firstName();
         const lastName = faker.name.lastName();
         const email = faker.internet.email(firstName);
         const password = faker.internet.password();
 
-        userData.push({firstName, lastName, email, password})
+        userData.push({ firstName, lastName, email, password })
     }
 
     const createdUsers = await User.collection.insertMany(userData);
 
     //create Emoloyer data
-    const employerData =[];
+    const employerData = [];
 
-    for(let i=0; i<100; i+=1) {
+    for (let i = 0; i < 100; i += 1) {
         const firstName = faker.name.firstName();
         const lastName = faker.name.lastName();
         const companyName = faker.company.companyName();
         const email = faker.internet.email(companyName);
         const password = faker.internet.password();
 
-        employerData.push({firstName, lastName, companyName, email, password});
+        employerData.push({ firstName, lastName, companyName, email, password });
     }
 
     const createdEmployers = await Employer.collection.insertMany(employerData);
 
     //create Job data
-    let jobData =[];
-    const randomNumber = function() {
+    let jobData = [];
+    const randomNumber = function () {
         const number = Math.floor(Math.Random() * categories.ops.length);
         return number
     }
 
-    for(let i=0; i<100; i+=1) {
+    for (let i = 0; i < 100; i += 1) {
         const role = faker.name.jobTitle();
         const description = faker.name.jobDescriptor();
         const image = faker.image.business();
         const category = categories[randomNumber()]._id;
 
         const randomEmployerIndex = Math.floor(Math.random() * createdEmployers.ops.length);
-        const {companyName, _id: employerId} = createdEmployers.ops[randomEmployerIndex];
+        const { companyName, _id: employerId } = createdEmployers.ops[randomEmployerIndex];
 
-        const createdJob = await Jobs.create({role, description, image, category, companyName, image, category});
+        const createdJob = await Jobs.create({ role, description, image, category, companyName, image, category });
 
         const updatedEmployer = await Employer.updateOne(
-            {_id: employerId},
-            {$push: {jobs: createdJob._id}}
+            { _id: employerId },
+            { $push: { jobs: createdJob._id } }
         );
 
         jobData.push(createdJob);
     }
 
     //create Interests
-    for(let i=0; i<100; i+=1) {
+    for (let i = 0; i < 100; i += 1) {
         const interestShown = faker.random.boolean();
         const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
         const { email } = createdUsers.ops[randomUserIndex];
@@ -124,36 +124,31 @@ db.once('open', async () => {
         const { _id: jobsId } = jobData[randomJobIndex];
 
         await Jobs.updateOne(
-            {_id: jobsId},
-            {$push: {interests: {interestShown, email}}},
+            { _id: jobsId },
+            { $push: { interests: { interestShown, email } } },
             { runValidators: true }
         );
     }
 
     //Create Profile Data
     let createdprofiles = [];
-    for(let i=0; i<createdUsers.ops.length; i+=1) {
+    for (let i = 0; i < createdUsers.ops.length; i += 1) {
         const profiletext = faker.lorem.paragraphs();
         const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
         const image = faker.image.people();
         const { email, _id: userId } = createdUsers.ops[randomUserIndex];
 
-        const createdProfile = await Profile.create({profiletext, image, email});
-        
+        const createdProfile = await Profile.create({ profiletext, image, email });
+
         const updatedUserProfile = await User.updateOne(
-            {_id: userId},
-            {$push: {profile: createdProfile._id}}
+            { _id: userId },
+            { $push: { profile: createdProfile._id } }
         );
-            createdprofiles.push(createdProfile);
+        createdprofiles.push(createdProfile);
     }
 
-    // //create candidates
-    // for(let i=0; i<200; i+=1) {
-    //     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
-    //     const {firstName, lastName, email} = createdUsers.ops[randomUserIndex];
-    //     const randomInterestIndex = Math.floor(Math.random() * jobData.ops.length);
-
-    // }
+    console.log('all done!');
+    process.exit(0);
 
 })
 

@@ -3,7 +3,6 @@ const dateFormat = require('../utils/dateFormat');
 const {
   Schema
 } = mongoose;
-const User = require('./User')
 
 const jobSchema = new Schema({
   email: {
@@ -15,7 +14,7 @@ const jobSchema = new Schema({
     type: String,
     required: true,
     required: 'Please Create Your Profile',
-    minlength: 5000,
+    minlength: 30,
     maxlength: 280000
   },
   createdAt: {
@@ -36,10 +35,12 @@ const jobSchema = new Schema({
     ref: 'Skills',
     required: true
   }],
-  applicants: [{
+  applicants: [
+    {
     type: Schema.Types.ObjectId,
     ref: 'User',
-  }],
+  }
+],
   candidates: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -54,8 +55,8 @@ const jobSchema = new Schema({
   }
 });
 
-jobSchema.virtual('userInterestCount').get(function () {
-  return this.usersInterested.length;
+jobSchema.virtual('applicantCount').get(function () {
+  return this.applicants.length;
 });
 
 jobSchema.virtual('candidateCount').get(function () {

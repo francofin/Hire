@@ -114,17 +114,17 @@ db.once('open', async () => {
 
 
      // create Interests v2
-     for (let i = 0; i < 30; i += 1) {
+     for (let i = 0; i < 100; i += 1) {
         const randomUserIndex = Math.floor(Math.random() * userData.length);
         const { _id: userId } = userData[randomUserIndex];
-        let interestId = userId;
-        while (interestId === userId){
-            const randomJobIndex = Math.floor(Math.random() * jobData.length);
-            interestId = jobData[randomJobIndex];
-        }
+        // let showInterestInUser = userId;
+        // while (showInterestInUser === userId) {
+        const randomJobIndex = Math.floor(Math.random() * jobData.length);
+        let interestedJob = jobData[randomJobIndex];
+        // }
         await User.updateOne(
             {_id:userId},
-            { $addToSet: {jobOffers:interestId}}          
+            { $addToSet: {jobOffers:interestedJob}}          
             )
     }
 
@@ -132,20 +132,50 @@ db.once('open', async () => {
   for (let i = 0; i < 50; i += 1) {
     const randomJobIndex = Math.floor(Math.random() * jobData.length);
     const { _id: jobId } = jobData[randomJobIndex];
-    let interestId = jobId;
-    while(interestId === jobId) {
-        const randomUserIndex = Math.floor(Math.random() * userData.length);
-        interestId = userData[randomUserIndex]; 
-    }
+    const randomUserIndex = Math.floor(Math.random() * userData.length);
+    let interestedUser = userData[randomUserIndex]; 
+    
       
-    console.log("interest id logged", interestId);
-    console.log("jobId", jobId);
+    // console.log("interest id logged", interestId);
+    // console.log("jobId", jobId);
      await Jobs.updateOne(
         {_id:jobId},
-        { $addToSet: {applicants:interestId}}        
+        { $addToSet: {applicants:interestedUser}}        
         )
 }
 
+// create Applied interest v2
+for (let i = 0; i < 100; i += 1) {
+    const randomUserIndex = Math.floor(Math.random() * userData.length);
+    const { _id: userId } = userData[randomUserIndex];
+    const randomJobIndex = Math.floor(Math.random() * jobData.length);
+    let appliedId = jobData[randomJobIndex]; 
+
+      
+    // console.log("interest id logged", interestId);
+    // console.log("jobId", jobId);
+     await User.updateOne(
+        {_id:userId},
+        { $addToSet: {applied:appliedId}}        
+        )
+}
+
+// create candidate interest v2
+for (let i = 0; i < 100; i += 1) {
+    const randomJobIndex = Math.floor(Math.random() * jobData.length);
+    const { _id: jobId } = jobData[randomJobIndex];
+    const randomUserIndex = Math.floor(Math.random() * userData.length);
+    let candidateId = userData[randomUserIndex]; 
+
+    
+      
+    // console.log("interest id logged", interestId);
+    // console.log("jobId", jobId);
+     await Jobs.updateOne(
+        {_id:jobId},
+        { $addToSet: {candidates:candidateId}}        
+        )
+}
 
     console.log('all done!');
     process.exit(0);

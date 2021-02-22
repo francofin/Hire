@@ -1,15 +1,11 @@
 import React, { useState } from "react";
 import JobList from "../components/JobList";
-import SkillMenu from "../components/SkillMenu";
 import Cart from '../components/Cart';
+// import homeimage from "../../assets/images/employeeproduct.jpg";
 
 const Home = () => {
   return (
-    <div className="container">
-      <SkillMenu />
-      <JobList />
-      <Cart />
-    </div>
+    <JobList></JobList>
   );
 };
 

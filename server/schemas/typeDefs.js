@@ -28,7 +28,7 @@ const typeDefs = gql`
         lastName: String
         email: String
         profileText: String
-        image: [Image]
+        image: String
         applied: [Jobs]
         jobOffers: [Jobs]
         matchedJobs:[Jobs]

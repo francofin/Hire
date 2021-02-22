@@ -36,12 +36,10 @@ const userSchema = new Schema({
     default: Date.now,
     get: timestamp => dateFormat(timestamp)
   },
-  image: [
-    {
-      type: Schema.Types.ObjectId,
+  image: {
+      type: Schema.Types.String,
       ref: 'Images'
-    }
-  ],
+    },
   orders: [Order.schema],
   jobOffers: [
     {

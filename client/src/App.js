@@ -35,21 +35,21 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <div>
-        <Provider store={store}>
-            <Nav/>
+          <Provider store={store}>
+            <Nav />
             <Header />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/signup" component={Signup} />
-              <Route exact path="/Profile" component={Profile} />
-              <Route exact path="/success" component={Success} />
-              <Route component={NoMatch} />
-            </Switch>
-            </Provider>
+            <main id="main">
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/signup" component={Signup} />
+                <Route exact path="/Profile" component={Profile} />
+                <Route exact path="/success" component={Success} />
+                <Route component={NoMatch} />
+              </Switch>
+            </main>
             <Footer />
-        </div>
+          </Provider>
       </Router>
     </ApolloProvider>
   );

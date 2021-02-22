@@ -1,14 +1,14 @@
 const express = require('express');
-const db = requrie('./config/connection');
+const db = require('./config/connection');
 
 const {resolvers, typeDefs} = require('./schemas');
 
 const {authMiddleWare} = require('./utils/auth');
 
 const {ApolloServer} = require('apollo-server-express');
-const { urlencoded } = require('express');
 
-const path = requrie('path');
+
+const path = require('path');
 
 const PORT = process.env.PORT || 3001;
 

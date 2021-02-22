@@ -1,28 +1,25 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
-    type Category {
+    type Skills {
         _id: ID
         name: String
     }
 
     type Jobs {
         _id: ID
-        companyName: String
+        email: String
         description: String
         createdAt: String
-        role: String
         image: String
-        category: Category
-        interestCount: Int
-        interests: [Interestd]
-    }
-
-    type Interested {
-        _id: ID
-        email: String
-        createdAt: String
-        interestShown: Boolean
+        skills: Skills
+        userInterestCount: Int
+        candidateCount: Int
+        matchCount: Int
+        applicants: [User]
+        candidates: [User]
+        matchedCandidates: [User]
+        
     }
 
     type User {
@@ -30,20 +27,22 @@ const typeDefs = gql`
         firstName: String
         lastName: String
         email: String
+        profileText: String
+        image: [Image]
+        applied: [Jobs]
+        jobOffers: [Jobs]
+        matchedJobs:[Jobs]
+        skills: [Skills]
         jobs: [Jobs]
         jobCount: Int
-        profile: Profile
+        offerCount: Int
+        matchedJobCount: Int
+        applicantCount: Int
+        skillCount: Int
         orders: Order
     }
 
-    type Profile {
-        _id: ID
-        profiletext: String
-        createdAt: String
-        email: String
-        image: String
-    }
-
+    
     type Order {
         _id: ID
         purchaseDate: String
@@ -55,21 +54,13 @@ const typeDefs = gql`
         name: String
         description: String
         price: Float
-        quantity: Int
     }
 
-    type Employer {
-        id:ID
-        firstName: String
-        lastName: String
-        companyName: String
-        email: String
-        profile: Profile
-        orders: Order
-        candidates: [User]
-        jobs: [Jobs]
-        candidateCount: Int
-        jobCount: Int
+    type Image {
+        _id:ID
+        name: String!
+        mimetype: String!
+        encoding: String!
     }
 
     type AuthUser {
@@ -77,36 +68,33 @@ const typeDefs = gql`
         user: User
     }
 
-    type AuthEmployer {
-        token: ID!
-        employer: Employer
-    }
+    type Checkout {
+        session: ID
+      }
 
     type Query {
         me: User
-        company: Employer
         users: [User]
-        employers: [Employer]
         user(email: String!): User
-        employer(companyName: String!): Employer
-        job(category: ID, companyName: String): [Jobs]
-        jobs: [Jobs]
+        job(_id: ID): [Jobs]
+        jobs(skills: ID): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         product(_id: ID!): Product
-        categories: [Category]
-        userProfile(email:String!): Profile
+        skills: [Skills]
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String! ): AuthUser
-        addEmployer(firstName: String!, lastName:String!, companyName: String!, email:String!, password: String!): AuthEmployer
-        addOrder(product: ID!): Order
-        addProfile(profiletext: String!, email:String!, image:String!): Profile
-        addJob(companyName: String!, role:String!, description: String!, image:String!, category:String!): Jobs
-        updateUser(firstName: String, lastName: String, email: String, password: String): User
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profiletext: String, skills: [String!], image:String): AuthUser
+        updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
         loginUser(email: String!, password: String!): AuthUser
-        loginEmployer(email: String!, password: String!): AuthEmployer
+        addJob(email: String!, description: String!, image:String, skills:[String!]): Jobs
+        updateJob(description: String, positionFilled:Boolean!): Jobs
+        showJobInterest(jobId:ID!): Jobs
+        showUserInterest(userId:ID!): User
+        addOrder(product: ID!): Order
+        singleUpload(file: Upload!): Image!
+        uploads: [Image]
     }
 
 

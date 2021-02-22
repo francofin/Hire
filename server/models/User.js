@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-
+const mongoose = require('mongoose');u
 const { Schema, model } = mongoose;
 const bcrypt = require('bcrypt');
 const Order = require('./Order');
@@ -26,21 +25,57 @@ const userSchema = new Schema({
     required: true,
     minlength: 8
   },
-  profile: {
-    type: Schema.Types.ObjectId,
-    ref: 'Profile'
+  profileText: {
+    type: String,
+    required: 'Please Create Your Profile',
+    minlength: 300,
+    maxlength: 280000
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: timestamp => dateFormat(timestamp)
+  },
+  image: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Images'
+    }
+  ],
   orders: [Order.schema],
-  jobs: [
+  jobOffers: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Jobs'
     }
   ],
+  applied: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Jobs'
+    }
+  ],
+  matchedJobs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Jobs'
+    }
+  ],
+  jobs: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'Jobs'
+    }
+],
+skills: [{
+  type: Schema.Types.ObjectId,
+  ref: 'Skills',
+  required: true
+}]
 });
 
 // set up pre-save middleware to create password
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
@@ -50,13 +85,27 @@ userSchema.pre('save', async function(next) {
 });
 
 // compare the incoming password with the hashed password
-userSchema.methods.isCorrectPassword = async function(password) {
+userSchema.methods.isCorrectPassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-userSchema.virtual('jobCount').get(function() {
-    return this.jobs.length;
-  });
+userSchema.virtual('offerCount').get(function () {
+  return this.jobOffers.length;
+});
+
+userSchema.virtual('appliedCount').get(function () {
+  return this.applied.length;
+});
+
+userSchema.virtual('matchedJobCount').get(function () {
+  return this.matchedJobs.length;
+});
+
+userSchema.virtual('skillCount').get(function () {
+  return this.skills.length;
+});
+
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

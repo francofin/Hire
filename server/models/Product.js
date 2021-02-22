@@ -11,15 +11,13 @@ const productSchema = new Schema({
   description: {
     type: String
   },
+  image: {
+    type: String,
+  },
   price: {
     type: Number,
     required: true,
     min: 20.99
-  },
-  quantity: {
-    type: Number,
-    max: 1,
-    default: 1
   },
 });
 

@@ -1,15 +1,13 @@
 const mongoose = require('mongoose');
 const dateFormat = require('../utils/dateFormat');
 const interestSchema = require('./Interested');
-const { Schema } = mongoose;
+const {
+  Schema
+} = mongoose;
+const User = require('./User')
 
 const jobSchema = new Schema({
-  companyName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  role: {
+  email: {
     type: String,
     required: true,
     trim: true
@@ -29,21 +27,44 @@ const jobSchema = new Schema({
   image: {
     type: String
   },
-  category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
+  positionFilled: {
+    type: Boolean,
+    required: true,
+    default: false
   },
-  interests: [interestSchema]
-},
-  {
-    toJSON: {
-      getters: true
-    }
-  });
+  skills: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Skills',
+    required: true
+  }],
+  applicants: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  candidates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  matchedCandidates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+}, {
+  toJSON: {
+    getters: true
+  }
+});
 
-jobSchema.virtual('interestCount').get(function () {
-  return this.interests.length;
+jobSchema.virtual('userInterestCount').get(function () {
+  return this.usersInterested.length;
+});
+
+jobSchema.virtual('candidateCount').get(function () {
+  return this.candidates.length;
+});
+
+jobSchema.virtual('matchCount').get(function () {
+  return this.matchedCandidates.length;
 });
 
 const Jobs = mongoose.model('Jobs', jobSchema);

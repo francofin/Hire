@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Skills, Order, Jobs,} = require('../models');
+const { User, Product, Skills, Order, Jobs, } = require('../models');
 const { signToken } = require('../utils/auth');
 const stripe = require('stripe')(process.env.STRIPE);
 
@@ -26,11 +26,12 @@ const resolvers = {
         params.skills = skills;
       }
 
-      return await Jobs.find(params)
+      return await Jobs.find(params).sort({ createdAt: -1 })
         .populate('skills')
         .populate('applicants')
         .populate('candidates')
         .populate('matchedCandidates')
+        
     },
 
     job: async (parent, { _id }) => {
@@ -154,48 +155,48 @@ const resolvers = {
       return { token, user };
     },
     addJob: async (parent, args, context) => {
-      if(context.user) {
-        const job =  await Jobs.create({...args, email: context.user.email});
+      if (context.user) {
+        const job = await Jobs.create({ ...args, email: context.user.email });
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { jobs: job._id } },
           { new: true }
         );
-    
-        return job;
-      }
-    },  
-    updateJob: async (parent,args, context) => {
-      if(context.user) {
-        const job =  await Jobs.findOneAndUpdate(
-         { _id: jobId}, 
-          args,
-          {new: true}
-        );
-    
+
         return job;
       }
     },
-    showJobInterest: async (parent, {jobId}, context) => {
-      if(context.user) {
+    updateJob: async (parent, args, context) => {
+      if (context.user) {
+        const job = await Jobs.findOneAndUpdate(
+          { _id: jobId },
+          args,
+          { new: true }
+        );
+
+        return job;
+      }
+    },
+    showJobInterest: async (parent, { jobId }, context) => {
+      if (context.user) {
         const updatedJob = await Jobs.findOneAndUpdate(
-          {_id: jobId},
-          {$addToSet: {applicants:context.user._id}},
-          {new: true}
+          { _id: jobId },
+          { $addToSet: { applicants: context.user._id } },
+          { new: true }
         );
         return updatedJob;
       }
 
       throw new AuthenticationError('You need to be logged in!');
     },
-    showUserInterest: async (parent, {userId}, context) => {
-      if(context.user) {
-        const userPost = await User.findOne({email:context.user.email})
+    showUserInterest: async (parent, { userId }, context) => {
+      if (context.user) {
+        const userPost = await User.findOne({ email: context.user.email })
         const updatedUser = await User.findOneAndUpdate(
-          {_id: userId},
-          {$addToSet: {jobOffers: jobId}},
-          {new: true}
+          { _id: userId },
+          { $addToSet: { jobOffers: jobId } },
+          { new: true }
         );
         return updatedUser;
       }

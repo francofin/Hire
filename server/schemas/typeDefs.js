@@ -8,10 +8,11 @@ const typeDefs = gql`
 
     type Jobs {
         _id: ID
+        email: String
         description: String
         createdAt: String
         image: String
-        skills: [Skills]
+        skills: Skills
         userInterestCount: Int
         candidateCount: Int
         matchCount: Int

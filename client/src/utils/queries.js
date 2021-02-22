@@ -9,7 +9,7 @@ export const QUERY_SKILLS = gql`
 }
 `;
 
-export const QUERY_JOBS = gql`
+export const QUERY_JOBS_BY_SKILL = gql`
   query getJobs($skills: ID) {
     jobs(skills: $skills) {
       _id

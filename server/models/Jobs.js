@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const dateFormat = require('../utils/dateFormat');
-const {
-  Schema
-} = mongoose;
 
 const jobSchema = new Schema({
   email: {
@@ -30,11 +28,11 @@ const jobSchema = new Schema({
     required: true,
     default: false
   },
-  skills: [{
+  skills: {
     type: Schema.Types.ObjectId,
     ref: 'Skills',
     required: true
-  }],
+  },
   applicants: [
     {
     type: Schema.Types.ObjectId,

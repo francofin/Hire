@@ -1,8 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect } from 'react';
 import SkillMenu from '../SkillMenu';
+import { UPDATE_JOBS, UPDATE_CURRENT_JOB } from '../../utils/actions';
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_JOBS_BY_SKILL, QUERY_ALL_JOBS } from "../../utils/queries";
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const JobList = () => {
+
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
+
+  const { jobs } = state;
+
+  const { loading, data: jobListings } = useQuery(QUERY_ALL_JOBS);
+  
+  console.log(jobListings);
+
+
+  useEffect(() => {
+
+    if (jobListings) {
+      dispatch({
+        type: UPDATE_JOBS,
+        jobs: jobListings.jobs
+      })
+
+      console.log("jobs listed");
+    }
+
+  }, [loading, jobListings, dispatch])
+
+  console.log("skills needed", jobs);
+
   return (
 
     <div id="portfolio" className="paddsection">
@@ -14,82 +44,31 @@ const JobList = () => {
       </div>
 
       <div className="container">
-      <div className="row">
-            <div className="col-lg-12 d-flex justify-content-center">
-            <SkillMenu/>
-            </div>
+        <div className="row">
+          <div className="col-lg-12 d-flex justify-content-center">
+            <SkillMenu />
+          </div>
         </div>
 
-        
-        <div className="row portfolio-container">
 
-          <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-            <img src="assets/img/portfolio/portfolio-1.jpg" className="img-fluid" alt=""/>
+        <div className="row portfolio-container">
+          {jobs.map(item => (
+            <div className="col-lg-4 col-md-6 portfolio-item filter-app">
+              <img src={item.image} className="img-fluid" alt="" />
               <div className="portfolio-info">
-                <h4>App 1</h4>
+                <h4>{item.skills.name}</h4>
                 <p>App</p>
                 <a href="assets/img/portfolio/portfolio-1.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 1"><i className="bx bx-plus"></i></a>
                 <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
               </div>
-          </div>
+            </div>
 
-            <div className="col-lg-4 col-md-6 portfolio-item filter-web">
-              <img src="assets/img/portfolio/portfolio-2.jpg" className="img-fluid" alt=""/>
-                <div className="portfolio-info">
-                  <h4>Web 3</h4>
-                  <p>Web</p>
-                  <a href="assets/img/portfolio/portfolio-2.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="Web 3"><i className="bx bx-plus"></i></a>
-                  <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-                </div>
-                  </div>
+          ))}
 
-              <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-                <img src="assets/img/portfolio/portfolio-3.jpg" className="img-fluid" alt=""/>
-                  <div className="portfolio-info">
-                    <h4>App 2</h4>
-                    <p>App</p>
-                    <a href="assets/img/portfolio/portfolio-3.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 2"><i className="bx bx-plus"></i></a>
-                    <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-                  </div>
-                  </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-                <div className="col-lg-4 col-md-6 portfolio-item filter-card">
-                  <img src="assets/img/portfolio/portfolio-4.jpg" className="img-fluid" alt=""/>
-                    <div className="portfolio-info">
-                      <h4>Card 2</h4>
-                      <p>Card</p>
-                      <a href="assets/img/portfolio/portfolio-4.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="Card 2"><i className="bx bx-plus"></i></a>
-                      <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-                    </div>
-                      </div>
-
-                  <div className="col-lg-4 col-md-6 portfolio-item filter-web">
-                    <img src="assets/img/portfolio/portfolio-5.jpg" className="img-fluid" alt=""/>
-                      <div className="portfolio-info">
-                        <h4>Web 2</h4>
-                        <p>Web</p>
-                        <a href="assets/img/portfolio/portfolio-5.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="Web 2"><i className="bx bx-plus"></i></a>
-                        <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-                      </div>
-                      </div>
-
-                    <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-                      <img src="assets/img/portfolio/portfolio-6.jpg" className="img-fluid" alt=""/>
-                        <div className="portfolio-info">
-                          <h4>App 3</h4>
-                          <p>App</p>
-                          <a href="assets/img/portfolio/portfolio-6.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 3"><i className="bx bx-plus"></i></a>
-                          <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-                        </div>
-                        </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-    );
-  };
-  
-  export default JobList;
-  
+export default JobList;

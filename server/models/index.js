@@ -1,4 +1,4 @@
-const Skills = require('./Skill');
+const Skills = require('./Skills');
 const Jobs = require('./Jobs');
 const Order = require('./Order');
 const Product = require('./Product');

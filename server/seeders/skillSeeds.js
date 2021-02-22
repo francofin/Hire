@@ -89,9 +89,9 @@ db.once('open', async () => {
         return number
     }
 
-    for (let i = 0; i < 100; i += 1) {
+    for (let i = 0; i < 102; i += 1) {
         const description = faker.lorem.paragraphs();
-        const image = faker.image.business();
+        const image = `${faker.image.business()}?random=${Date.now()}`
         const skills = skillSet[randomNumber()]._id;
         const positionFilled = faker.random.boolean();
 

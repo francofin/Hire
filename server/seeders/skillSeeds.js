@@ -68,7 +68,7 @@ db.once('open', async () => {
         const email = faker.internet.email(firstName);
         const password = faker.internet.password();
         const profileText = faker.lorem.paragraphs();
-        const image = faker.image.people();
+        const image = `${faker.image.people()}?random=${Date.now()}`
         const skills = skillSet[Math.floor(Math.random()*skillSet.length)]._id;
 
         userData.push({ firstName, lastName, email, password, profileText, image, skills })

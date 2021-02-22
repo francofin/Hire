@@ -1,6 +1,7 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Skills, Order, Jobs, } = require('../models');
 const { signToken } = require('../utils/auth');
+const { uploadFile } = require('../utils/upload');
 const stripe = require('stripe')(process.env.STRIPE);
 
 const resolvers = {
@@ -124,11 +125,12 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, args) => {
+    addUser: async (parent, {args, file}) => {
       const user = await User.create(args);
+      const image = await Image.create(file);
       const token = signToken(user);
 
-      return { token, user };
+      return { token, user, image };
     },
     updateUser: async (parent, args, context) => {
       return await User.findOneAndUpdate(

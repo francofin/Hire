@@ -9,6 +9,101 @@ export const QUERY_SKILLS = gql`
 }
 `;
 
+export const QUERY_USER = gql`
+query user($email:String) {
+  user(email:$email) {
+    _id
+    email
+    firstName
+    lastName
+    profileText
+    image 
+    skills {
+      _id
+      name
+    }
+    jobOffers {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+    applied {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+    matchedJobs {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+  }
+}
+`;
+
+export const QUERY_ALL_USERS = gql`
+  query getusers($email: String) {
+    users(email: $email) {
+      _id
+    email
+    firstName
+    lastName
+    profileText
+    image 
+    skills {
+      _id
+      name
+    }
+    jobOffers {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+    applied {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+    matchedJobs {
+      description
+      positionFilled
+      image
+      skills {
+        _id
+        name
+      }
+      createdAt
+    }
+  }
+}
+    
+`;
+
 export const QUERY_JOBS_BY_SKILL = gql`
   query getJobs($skills: ID) {
     jobs(skills: $skills) {

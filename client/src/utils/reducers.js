@@ -3,6 +3,8 @@ import {
     UPDATE_CURRENT_JOB,
     UPDATE_SKILLS,
     UPDATE_CURRENT_SKILL,
+    UPDATE_USERS,
+    UPDATE_CURRENT_USER
 } from './actions';
 
 
@@ -10,7 +12,9 @@ const initialState = {
     jobs: [],
     skills: [],
     currentSkill: '',
-    currentJob: ''
+    currentJob: '',
+    users: [],
+    currentUser: ''
 };
 
 export const reducers = (state = initialState, action) => {
@@ -39,6 +43,17 @@ export const reducers = (state = initialState, action) => {
             return {
                 ...state,
                 currentSkill: action.currentSkill
+            };
+        case UPDATE_USERS:
+            return {
+                ...state,
+                users: [...action.users]
+            };
+
+        case UPDATE_CURRENT_USER:
+            return {
+                ...state,
+                cuurentUser: action.currentUser
             };
 
 

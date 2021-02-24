@@ -19,6 +19,7 @@ const typeDefs = gql`
         description: String
         createdAt: String
         image: String
+        positionFilled: Boolean
         skills: Skills
         userInterestCount: Int
         candidateCount: Int
@@ -34,8 +35,9 @@ const typeDefs = gql`
         firstName: String
         lastName: String
         email: String
+        password: String
         profileText: String
-        image: [Image]
+        image: String
         applied: [Jobs]
         jobOffers: [Jobs]
         matchedJobs:[Jobs]
@@ -80,16 +82,18 @@ const typeDefs = gql`
         jobs(skills: ID): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
+        images: [Image]
         product(_id: ID!): Product
         skills: [Skills]
+        skill(_id:ID): Skills
         uploads: [Image]
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profiletext: String, skills: [String!], image:String): AuthUser
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID!], image:String): AuthUser
         updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
-        loginUser(email: String!, password: String!): AuthUser
-        addJob(email: String!, description: String!, image:String, skills:[String!]): Jobs
+        login(email: String!, password: String!): AuthUser
+        addJob(email: String!, description: String!, image:String, skills:[ID!]): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(jobId:ID!): Jobs
         showUserInterest(userId:ID!): User

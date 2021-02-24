@@ -10,28 +10,25 @@ import { Link } from "react-router-dom";
 import Auth from "../utils/auth";
 
 function Signup(props) {
-  // const [formState, setFormState] = useState({ email: '', password: '' })
-  // const [Signup, { error }] = useMutation(Signup);
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
+  const [formState, setFormState] = useState({ email: '', password: '', firstName: '', lastName: '', profileText:'' });
+  const [addUser] = useMutation(ADD_USER);
   const [file, setFile] = useState({});
   const [uploadFile] = useMutation(UPLOAD_MUTATION);
 
-  console.log(uploadFile);
-
-  const handleUpload = async () => {
+  const handleUpload = async (event) => {
+    event.preventDefault();
     if (file) {
       console.log("filesssss", file)
       uploadFile({
         variables:  {file }
       });
       setFile({})
-      console.log("Uploaded successfully", file)
-    }
-    else {
-      console.log("No files to upload")
-    }
+    };
+    console.log("uploaded file", file)
+    return file;
   };
 
   const {getRootProps, getInputProps} = useDropzone({
@@ -45,8 +42,6 @@ function Signup(props) {
     console.log("aacepted", acceptedFile);
     }
   });
-
-  console.log("files", file);
 
   const thumbs = 
     <div className='thumb' key={file.name}>
@@ -64,8 +59,6 @@ function Signup(props) {
   const { skills } = state;
 
   const { loading, data: skillData } = useQuery(QUERY_SKILLS);
-  console.log(skillData);
-  console.log(skills);
 
   useEffect(() => {
     // if categoryData exists or has changed from the response of useQuery, then run dispatch()
@@ -75,8 +68,6 @@ function Signup(props) {
         type: UPDATE_SKILLS,
         skills: skillData.skills,
       });
-
-      console.log("Skill clicked", skillData);
       //   skillData.skills.forEach(skill => {
       //     idbPromise('categories', 'put', skill);
       //   });
@@ -93,14 +84,27 @@ function Signup(props) {
 
 
 
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = async event => {
     event.preventDefault();
-
-    console.log("loggedin");
+    const image = handleUpload();
+    
+    const mutationResponse = await addUser({
+      variables: {
+        email: formState.email, password: formState.password,
+        firstName: formState.firstName, lastName: formState.lastName, 
+        profileText: formState.profileText, skills: formState.skills
+      }
+    });
+    const token = mutationResponse.data.addUser.token;
+    Auth.login(token);
   };
 
-  const handleChange = (event) => {
-    console.log("loggedin");
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value
+    });
   };
 
   return (
@@ -232,7 +236,7 @@ function Signup(props) {
                           className="form-check-input"
                           id="firstName"
                           placeholder="First Name"
-                          value={skill.name}
+                          value={skill._id}
                           onChange={handleChange}
                         />
                         <label className="form-check-label">{skill.name}</label>
@@ -246,7 +250,9 @@ function Signup(props) {
                         class="form-control"
                         name="profileText"
                         rows="20"
+                        id="profileText"
                         placeholder="Please tell us about yourself and your job experience. Include as much detail as you can."
+                        onChange={handleChange}
                       ></textarea>
                       <div class="validate"></div>
                     </div>

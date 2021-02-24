@@ -14,15 +14,14 @@ const storeUpload = async ({stream, filename, mimetype}  ) => {
   return new Promise((resolve, reject) =>{
     stream
     .pipe(createWriteStream(path))
+    .on('finish', () => resolve({ id, path, filename, mimetype }))
+    .on('error', reject)
   
   }
   );
 };
 
 const processUpload = async (upload) => {
-  // console.log("uploaded file", upload.path); 
-  console.log("fksmdflsfjd", upload.createReadStream);
-  // const {file: {createReadStream}} = await upload;
   const {createReadStream, mimetype, filename } = await upload;
   const stream = createReadStream();
   // console.log("stream", stream);
@@ -34,6 +33,12 @@ const resolvers = {
   Query: {
     skills: async () => {
       return await Skills.find();
+    },
+    skill: async (parent, { _id }) => {
+      return await Skills.findOne({ _id })
+    },
+    images: async () => {
+      return await Image.find();
     },
     product: async (parent, { name }) => {
       const params = {};
@@ -71,14 +76,14 @@ const resolvers = {
 
     users: async () => {
       return User.find()
-        .select('-__v -password')
+        .select('-__v')
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
     },
     user: async (parent, { email }) => {
       return User.findOne({ email })
-        .select('-__v -password')
+        .select('-__v')
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
@@ -160,18 +165,20 @@ const resolvers = {
 
      
       const upload = await processUpload(file);
-      console.log(upload);
-      await Image.create(upload);
-
-      return upload;
+      // console.log(upload);
+      const uploadedFile = await Image.create(upload);
+      console.log(uploadedFile);
+      return uploadedFile;
     },
-    addUser: async (parent, {args, file}) => {
-      if(upload){
+    addUser: async (parent, args) => {
+  
+        // console.log(args);
         const user = await User.create(args);
         const token = signToken(user);
-      }
-      
-      return { token, user, image };
+
+        // console.log(user);
+
+      return { token, user };
     },
     updateUser: async (parent, args, context) => {
       return await User.findOneAndUpdate(
@@ -180,7 +187,7 @@ const resolvers = {
         { new: true }
       );
     },
-    loginUser: async (parent, { email, password }) => {
+    login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {

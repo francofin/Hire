@@ -32,8 +32,8 @@ export const ADD_ORDER = gql`
 
 
 export const ADD_USER = gql`
-  mutation addUser($firstName: String!, $lastName:String!, $email:String!, $password: String!, $profiletext: String, $skills: [String!], $image:String) {
-    addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, profiletext: $profiletext, skills: $skills, image: $image) {
+  mutation addUser($firstName: String!, $lastName:String!, $email:String!, $password: String!, $profileText: String!, $skills: [ID!], $image:String) {
+    addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, profileText: $profileText, skills: $skills, image: $image) {
       token
       user {
         _id

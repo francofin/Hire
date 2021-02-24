@@ -12,11 +12,6 @@ const imageSchema = new Schema({
     },
     path: {
         type: String
-    },
-    img:
-    {
-        data: Buffer,
-        contentType: String
     }
 });
 

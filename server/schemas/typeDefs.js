@@ -8,10 +8,11 @@ const typeDefs = gql`
 
     type Jobs {
         _id: ID
+        email: String
         description: String
         createdAt: String
         image: String
-        skills: [Skills]
+        skills: Skills
         userInterestCount: Int
         candidateCount: Int
         matchCount: Int
@@ -27,7 +28,7 @@ const typeDefs = gql`
         lastName: String
         email: String
         profileText: String
-        image: [Image]
+        image: String
         applied: [Jobs]
         jobOffers: [Jobs]
         matchedJobs:[Jobs]
@@ -57,7 +58,8 @@ const typeDefs = gql`
 
     type Image {
         _id:ID
-        name: String!
+        path: String!
+        filename: String!
         mimetype: String!
         encoding: String!
     }
@@ -75,16 +77,17 @@ const typeDefs = gql`
         me: User
         users: [User]
         user(email: String!): User
-        job(Skills: ID): [Jobs]
-        jobs: [Jobs]
+        job(_id: ID): [Jobs]
+        jobs(skills: ID): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         product(_id: ID!): Product
         skills: [Skills]
+        uploads: [Image]
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profiletext: String, skills: [Skills!], image:String): AuthUser
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profiletext: String, skills: [String!], image:String): AuthUser
         updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
         loginUser(email: String!, password: String!): AuthUser
         addJob(email: String!, description: String!, image:String, skills:[String!]): Jobs
@@ -93,7 +96,6 @@ const typeDefs = gql`
         showUserInterest(userId:ID!): User
         addOrder(product: ID!): Order
         singleUpload(file: Upload!): Image!
-        uploads: [Image]
     }
 
 

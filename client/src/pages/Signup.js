@@ -22,9 +22,9 @@ function Signup(props) {
 
   const handleUpload = async () => {
     if (file) {
-      console.log(file)
+      console.log("filesssss", file)
       uploadFile({
-        variables: { file }
+        variables:  {file }
       });
       setFile({})
       console.log("Uploaded successfully", file)

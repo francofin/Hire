@@ -1,26 +1,32 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Skills, Order, Jobs, Image } = require('../models');
 const { signToken } = require('../utils/auth');
-const {createWriteStream, mkdir} = require('fs');
+const uploadFile = require('../utils/upload');
+const {createWriteStream, mkdir, createReadStream} = require('fs');
 const fs = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
 const shortid = require('shortid');
 
-const storeUpload = async (file ) => {
+const storeUpload = async ({stream, filename, mimetype}  ) => {
   const id = shortid.generate();
-  const path = `images/${id}-${file.path}`;
+  const path = `images/${id}-${filename}`;
 
   return new Promise((resolve, reject) =>{
-    fs.writeFileSync(path, file, 'base64');
+    stream
+    .pipe(createWriteStream(path))
+  
   }
   );
 };
 
 const processUpload = async (upload) => {
-  console.log("uploaded file", upload.file.path);
-  const {stream, mimetype, filename } = upload;
+  // console.log("uploaded file", upload.path); 
+  console.log("fksmdflsfjd", upload.createReadStream);
+  // const {file: {createReadStream}} = await upload;
+  const {createReadStream, mimetype, filename } = await upload;
+  const stream = createReadStream();
   // console.log("stream", stream);
-  const file = await storeUpload( upload.file );
+  const file = await storeUpload( {stream, filename, mimetype });
   return file;
 };
 
@@ -146,20 +152,16 @@ const resolvers = {
   },
   Mutation: {
 
-    uploadFile: async ( parent, file ) => {
+    uploadFile: async ( parent, {file} ) => {
       console.log(file);
       mkdir('images', { recursive: true }, (err) => {
         if (err) throw err;
       });
 
-      const upload = await Image.create({
-        {filename: file.path},
-        
-      })
-
+     
       const upload = await processUpload(file);
-      // console.log(upload);
-      // await Image.create(upload);
+      console.log(upload);
+      await Image.create(upload);
 
       return upload;
     },

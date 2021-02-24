@@ -45,10 +45,10 @@ export const ADD_USER = gql`
 export const UPLOAD_MUTATION = gql`
   mutation uploadFile($file: Upload!) {
     uploadFile(file: $file) {
-      path
       id
       filename
       mimetype
+      path
     }
   }
 `

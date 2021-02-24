@@ -1,13 +1,44 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Skills, Order, Jobs, } = require('../models');
+const { User, Product, Skills, Order, Jobs, Image } = require('../models');
 const { signToken } = require('../utils/auth');
-const { uploadFile } = require('../utils/upload');
+const uploadFile = require('../utils/upload');
+const {createWriteStream, mkdir, createReadStream} = require('fs');
+const fs = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
+const shortid = require('shortid');
+
+const storeUpload = async ({stream, filename, mimetype}  ) => {
+  const id = shortid.generate();
+  const path = `images/${id}-${filename}`;
+
+  return new Promise((resolve, reject) =>{
+    stream
+    .pipe(createWriteStream(path))
+    .on('finish', () => resolve({ id, path, filename, mimetype }))
+    .on('error', reject)
+  
+  }
+  );
+};
+
+const processUpload = async (upload) => {
+  const {createReadStream, mimetype, filename } = await upload;
+  const stream = createReadStream();
+  // console.log("stream", stream);
+  const file = await storeUpload( {stream, filename, mimetype });
+  return file;
+};
 
 const resolvers = {
   Query: {
     skills: async () => {
       return await Skills.find();
+    },
+    skill: async (parent, { _id }) => {
+      return await Skills.findOne({ _id })
+    },
+    images: async () => {
+      return await Image.find();
     },
     product: async (parent, { name }) => {
       const params = {};
@@ -45,14 +76,14 @@ const resolvers = {
 
     users: async () => {
       return User.find()
-        .select('-__v -password')
+        .select('-__v')
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
     },
     user: async (parent, { email }) => {
       return User.findOne({ email })
-        .select('-__v -password')
+        .select('-__v')
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
@@ -125,12 +156,29 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, {args, file}) => {
-      const user = await User.create(args);
-      const image = await Image.create(file);
-      const token = signToken(user);
 
-      return { token, user, image };
+    uploadFile: async ( parent, {file} ) => {
+      console.log(file);
+      mkdir('images', { recursive: true }, (err) => {
+        if (err) throw err;
+      });
+
+     
+      const upload = await processUpload(file);
+      // console.log(upload);
+      const uploadedFile = await Image.create(upload);
+      console.log(uploadedFile);
+      return uploadedFile;
+    },
+    addUser: async (parent, args) => {
+  
+        // console.log(args);
+        const user = await User.create(args);
+        const token = signToken(user);
+
+        // console.log(user);
+
+      return { token, user };
     },
     updateUser: async (parent, args, context) => {
       return await User.findOneAndUpdate(
@@ -139,7 +187,7 @@ const resolvers = {
         { new: true }
       );
     },
-    loginUser: async (parent, { email, password }) => {
+    login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {

@@ -27,7 +27,7 @@ const userSchema = new Schema({
   },
   profileText: {
     type: String,
-    required: "Please Create Your Profile",
+    required: true,
     minlength: 300,
     maxlength: 280000,
   },
@@ -37,8 +37,7 @@ const userSchema = new Schema({
     get: (timestamp) => dateFormat(timestamp),
   },
   image: {
-    type: Schema.Types.String,
-    ref: "Images",
+    type: String
   },
   orders: [Order.schema],
   jobOffers: [

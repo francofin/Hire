@@ -1,24 +1,64 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/react-hooks";
-import { ADD_USER } from "../utils/mutations";
+import { ADD_USER, UPLOAD_MUTATION } from "../utils/mutations";
 import { UPDATE_SKILLS, UPDATE_CURRENT_SKILL } from "../utils/actions";
 import { useQuery } from "@apollo/react-hooks";
 import { QUERY_SKILLS } from "../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
+import { useDropzone } from 'react-dropzone';
 import { Link } from "react-router-dom";
 import Auth from "../utils/auth";
 
-function Signup() {
-  // const [formState, setFormState] = useState({ email: '', password: '' })
-  // const [Signup, { error }] = useMutation(Signup);
+function Signup(props) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
+
+  const [formState, setFormState] = useState({ email: '', password: '', firstName: '', lastName: '', profileText:'' });
+  const [addUser] = useMutation(ADD_USER);
+  const [file, setFile] = useState({});
+  const [uploadFile] = useMutation(UPLOAD_MUTATION);
+
+  const handleUpload = async (event) => {
+    event.preventDefault();
+    if (file) {
+      console.log("filesssss", file)
+      uploadFile({
+        variables:  {file }
+      });
+      setFile({})
+    };
+    console.log("uploaded file", file)
+    return file;
+  };
+
+  const {getRootProps, getInputProps} = useDropzone({
+    accept: 'image/*',
+    onDrop: acceptedFile => {
+    setFile(
+      Object.assign(acceptedFile[0], {
+        preview: URL.createObjectURL(acceptedFile[0]),
+      })
+    );
+    console.log("aacepted", acceptedFile);
+    }
+  });
+
+  const thumbs = 
+    <div className='thumb' key={file.name}>
+      <div className='thumb-inner'>
+        <img src={file.preview} className='img' alt={file.length && "img"} />
+      </div>
+    </div>
+
+    useEffect(() => () => {
+        URL.revokeObjectURL(file.preview)
+    }, [file]);
+
+
 
   const { skills } = state;
 
   const { loading, data: skillData } = useQuery(QUERY_SKILLS);
-  console.log(skillData);
-  console.log(skills);
 
   useEffect(() => {
     // if categoryData exists or has changed from the response of useQuery, then run dispatch()
@@ -28,8 +68,6 @@ function Signup() {
         type: UPDATE_SKILLS,
         skills: skillData.skills,
       });
-
-      console.log("Skill clicked", skillData);
       //   skillData.skills.forEach(skill => {
       //     idbPromise('categories', 'put', skill);
       //   });
@@ -44,14 +82,29 @@ function Signup() {
     // }
   }, [skillData, loading, dispatch]);
 
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
 
-    console.log("loggedin");
+
+  const handleFormSubmit = async event => {
+    event.preventDefault();
+    const image = handleUpload();
+    
+    const mutationResponse = await addUser({
+      variables: {
+        email: formState.email, password: formState.password,
+        firstName: formState.firstName, lastName: formState.lastName, 
+        profileText: formState.profileText, skills: formState.skills
+      }
+    });
+    const token = mutationResponse.data.addUser.token;
+    Auth.login(token);
   };
 
-  const handleChange = (event) => {
-    console.log("loggedin");
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormState({
+      ...formState,
+      [name]: value
+    });
   };
 
   return (
@@ -81,7 +134,7 @@ function Signup() {
             </div>
 
             <div className="col-lg-6">
-              <form onSubmit={handleFormSubmit} className="php-email-form">
+              <form onSubmit={handleFormSubmit} className="php-email-form" enctype="multipart/form-data">
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group contact-block1">
@@ -139,7 +192,25 @@ function Signup() {
                     </div>
                   </div>
 
-                  <div className="col-lg-12" style={{paddingBottom: 20}}>
+                  <section className='container'>
+                    <div {...getRootProps({ className: 'dropzone' })}>
+                      <input {...getInputProps()} />
+                      <p>Drag 'n' drop some file here, or click to select file</p>
+                    </div>
+                    <aside className='thumb-container'>
+                      {thumbs}
+                      <button
+                        type='submit'
+                        className={`button`}
+                        style={{ display: file && !Object.keys(file).length && 'none' }}
+                        onClick={handleUpload}
+                      >
+                        Upload
+                      </button>
+                    </aside>
+                  </section>
+                  {/* 
+                  <div className="col-lg-12" style={{ paddingBottom: 20 }}>
                     <div className="input-group">
                       <div className="custom-file">
                         <input
@@ -153,7 +224,7 @@ function Signup() {
                         <div className="validate"></div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="col-lg-12" style={{ paddingBottom: 20 }}>
                     {skills.map((skill) => (
@@ -165,7 +236,7 @@ function Signup() {
                           className="form-check-input"
                           id="firstName"
                           placeholder="First Name"
-                          value={skill.name}
+                          value={skill._id}
                           onChange={handleChange}
                         />
                         <label className="form-check-label">{skill.name}</label>
@@ -179,7 +250,9 @@ function Signup() {
                         class="form-control"
                         name="profileText"
                         rows="20"
+                        id="profileText"
                         placeholder="Please tell us about yourself and your job experience. Include as much detail as you can."
+                        onChange={handleChange}
                       ></textarea>
                       <div class="validate"></div>
                     </div>

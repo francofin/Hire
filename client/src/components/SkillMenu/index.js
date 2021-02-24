@@ -11,8 +11,6 @@ function SkillMenu() {
     const { skills } = state;
 
     const { loading, data: skillData } = useQuery(QUERY_SKILLS);
-    console.log(skillData);
-    console.log(skills);
 
     useEffect(() => {
         // if categoryData exists or has changed from the response of useQuery, then run dispatch()
@@ -22,8 +20,6 @@ function SkillMenu() {
                 type: UPDATE_SKILLS,
                 skills: skillData.skills
             });
-
-            console.log("Skill clicked", skillData);
             //   skillData.skills.forEach(skill => {
             //     idbPromise('categories', 'put', skill);
             //   });

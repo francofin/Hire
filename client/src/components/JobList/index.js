@@ -15,8 +15,6 @@ const JobList = () => {
 
   const { loading, data: jobListings } = useQuery(QUERY_ALL_JOBS);
   
-  console.log(jobListings);
-
 
   useEffect(() => {
 
@@ -26,12 +24,10 @@ const JobList = () => {
         jobs: jobListings.jobs
       })
 
-      console.log("jobs listed");
     }
 
   }, [loading, jobListings, dispatch])
 
-  console.log("skills needed", jobs);
 
   return (
 

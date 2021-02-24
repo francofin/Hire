@@ -3,16 +3,18 @@ const {Schema, model} = mongoose;
 
 
 const imageSchema = new Schema({
-    name: {
+    filename: {
         type: String,
         required: true,
     },
-    image: {
-        data: String, 
-        contentType: String
+    mimetype: {
+        type: String, 
     },
+    path: {
+        type: String
+    }
 });
 
-const Images = model('Image', imageSchema);
+const Image = model("Image", imageSchema);
 
-module.exports = Images;
+module.exports = Image;

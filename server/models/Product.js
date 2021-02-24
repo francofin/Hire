@@ -17,7 +17,7 @@ const productSchema = new Schema({
   price: {
     type: Number,
     required: true,
-    min: 20.99
+    min: 20.99 
   },
 });
 

@@ -185,7 +185,7 @@ const resolvers = {
           {new: true}
         );
         return updatedJob;
-      }
+      
 
       throw new AuthenticationError('You need to be logged in!');
     },

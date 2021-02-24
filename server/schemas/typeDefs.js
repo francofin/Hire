@@ -6,6 +6,13 @@ const typeDefs = gql`
         name: String
     }
 
+    type Image {
+        id: ID!
+        filename: String!
+        mimetype: String!
+        path: String!
+    }
+
     type Jobs {
         _id: ID
         email: String
@@ -28,7 +35,7 @@ const typeDefs = gql`
         lastName: String
         email: String
         profileText: String
-        image: String
+        image: [Image]
         applied: [Jobs]
         jobOffers: [Jobs]
         matchedJobs:[Jobs]
@@ -56,13 +63,6 @@ const typeDefs = gql`
         price: Float
     }
 
-    type Image {
-        _id:ID
-        name: String!
-        mimetype: String!
-        encoding: String!
-    }
-
     type AuthUser {
         token: ID!
         user: User
@@ -82,6 +82,7 @@ const typeDefs = gql`
         checkout(product: ID!): Checkout
         product(_id: ID!): Product
         skills: [Skills]
+        uploads: [Image]
     }
 
     type Mutation {
@@ -93,8 +94,7 @@ const typeDefs = gql`
         showJobInterest(jobId:ID!): Jobs
         showUserInterest(userId:ID!): User
         addOrder(product: ID!): Order
-        singleUpload(file: Upload!): Image!
-        uploads: [Image]
+        uploadFile(file: Upload!): Image!
     }
 
 

@@ -1,10 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from 'apollo-boost';
+import { ApolloProvider } from "@apollo/react-hooks";
+import ApolloClient from "apollo-boost";
+import {createUploadLink} from 'apollo-upload-client';
+import { InMemoryCache} from 'apollo-cache-inmemory';
+
 // import { StoreProvider } from "./utils/GlobalState";
 import { Provider } from "react-redux";
-import Footer from './components/Footer';
+import Footer from "./components/Footer";
 import NoMatch from "./pages/NoMatch";
 import Success from "./pages/Success";
 import Nav from "./components/Nav";
@@ -13,28 +16,30 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Header from "./components/Header";
-import store from './utils/store';
-
-
-
+import store from "./utils/store";
+const httpLink = createUploadLink({
+  uri: "http://localhost:3001",
+});
 
 const client = new ApolloClient({
   request: (operation) => {
-    const token = localStorage.getItem('id_token')
+    const token = localStorage.getItem("id_token");
     operation.setContext({
       headers: {
-        authorization: token ? `Bearer ${token}` : ''
-      }
-    })
+        authorization: token ? `Bearer ${token}` : "",
+      },
+    });
   },
-  uri: '/graphql',
-})
-
+  cache: new InMemoryCache,
+  link: httpLink,
+  uri: "/graphql",
+});
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <Router>
+        <div>
           <Provider store={store}>
             <Nav />
             <Header />
@@ -50,6 +55,7 @@ function App() {
             </main>
             <Footer />
           </Provider>
+        </div>
       </Router>
     </ApolloProvider>
   );

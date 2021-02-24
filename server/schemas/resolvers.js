@@ -1,7 +1,28 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { User, Product, Skills, Order, Jobs, } = require('../models');
+const { User, Product, Skills, Order, Jobs, Image } = require('../models');
 const { signToken } = require('../utils/auth');
+const {createWriteStream, mkdir} = require('fs');
+const fs = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
+const shortid = require('shortid');
+
+const storeUpload = async (file ) => {
+  const id = shortid.generate();
+  const path = `images/${id}-${file.path}`;
+
+  return new Promise((resolve, reject) =>{
+    fs.writeFileSync(path, file, 'base64');
+  }
+  );
+};
+
+const processUpload = async (upload) => {
+  console.log("uploaded file", upload.file.path);
+  const {stream, mimetype, filename } = upload;
+  // console.log("stream", stream);
+  const file = await storeUpload( upload.file );
+  return file;
+};
 
 const resolvers = {
   Query: {
@@ -124,11 +145,31 @@ const resolvers = {
     },
   },
   Mutation: {
-    addUser: async (parent, args) => {
-      const user = await User.create(args);
-      const token = signToken(user);
 
-      return { token, user };
+    uploadFile: async ( parent, file ) => {
+      console.log(file);
+      mkdir('images', { recursive: true }, (err) => {
+        if (err) throw err;
+      });
+
+      const upload = await Image.create({
+        {filename: file.path},
+        
+      })
+
+      const upload = await processUpload(file);
+      // console.log(upload);
+      // await Image.create(upload);
+
+      return upload;
+    },
+    addUser: async (parent, {args, file}) => {
+      if(upload){
+        const user = await User.create(args);
+        const token = signToken(user);
+      }
+      
+      return { token, user, image };
     },
     updateUser: async (parent, args, context) => {
       return await User.findOneAndUpdate(

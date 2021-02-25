@@ -1,24 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { QUERY_USER, QUERY_ALL_USERS } from "../utils/queries";
+import { Link, useParams, Redirect } from "react-router-dom";
+import { QUERY_USER, QUERY_ME_BASIC } from "../utils/queries";
 import {useDispatch, useSelector} from 'react-redux';
-import { UPDATE_USERS, UPDATE_CURRENT_USER } from '../utils/actions';
 import { useQuery } from '@apollo/react-hooks';
+import Auth from '../utils/auth';
 
 const Profile = () => {
 
-  const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  // const dispatch = useDispatch();
+  // const state = useSelector(state => state);
 
-  const {users} = state;
-  const { email } = useParams();
-  const { loading, data: userData } = useQuery(QUERY_ALL_USERS);
+  // const {users} = state;
+  const { email: userParam } = useParams();
+  console.log(userParam)
 
-  
+  const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME_BASIC, {
+    variables: { email: userParam }
+  });
 
-  console.log("all user data", userData);
+  console.log(data);
+  const user = data?.me || data?.user || {};
+ 
+
+  // const user = data?.me || data?.user || {};
+
+  // if (!user?.email) {
+  //   return (
+  //     <h4>
+  //       You need to be logged in to see this page. Use the navigation links above to sign up or log in!
+  //     </h4>
+  //   );
+  // }
+ 
+
+  if (Auth.loggedIn() && Auth.getProfile().data.email=== userParam) {
+    return <Redirect to="/profile" />;
+  }
+
+  // console.log("all user data", Auth.getProfile().data);
+  console.log("all user data222", data);
+
   // console.log(id);
-
+  // console.log("all user data222", userParam);
     return (
       <main id="main">
 

@@ -11,17 +11,6 @@ function Login() {
   const [formState, setFormState] = useState({ email: '', password: '' })
   const [login, { error }] = useMutation(LOGIN);
 
-  const handleFormSubmit = async event => {
-    event.preventDefault();
-    try {
-      const mutationResponse = await login({ variables: { email: formState.email, password: formState.password } })
-      const token = mutationResponse.data.login.token;
-      Auth.login(token);
-    } catch (e) {
-      console.log(e)
-    }
-  };
-
   const handleChange = event => {
     const { name, value } = event.target;
     setFormState({
@@ -29,6 +18,20 @@ function Login() {
       [name]: value
     });
   };
+
+  const handleFormSubmit = async event => {
+    event.preventDefault();
+    try {
+      const {data} = await login({ variables: { ...formState } });
+      const token = data.login.token;
+      console.log(data);
+      Auth.login(token);
+    } catch (e) {
+      console.log(e)
+    }
+  };
+
+  
 
   return (
     <div id="contact" className="paddsection">

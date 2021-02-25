@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-client";
+import ApolloClient from "apollo-boost-upload";
 import {createUploadLink} from 'apollo-upload-client';
 import { InMemoryCache} from 'apollo-cache-inmemory';
 
@@ -22,7 +22,7 @@ const httpLink = createUploadLink({
 });
 
 const client = new ApolloClient({
-  request: (operation) => {
+  request: operation => {
     const token = localStorage.getItem("id_token");
     operation.setContext({
       headers: {
@@ -48,7 +48,7 @@ function App() {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/Profile" component={Profile} />
+                <Route exact path="/profile/:email?" component={Profile} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />
               </Switch>

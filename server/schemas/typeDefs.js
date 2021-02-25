@@ -30,6 +30,19 @@ const typeDefs = gql`
         
     }
 
+    type Order {
+        _id: ID
+        purchaseDate: String
+        product: Product
+    }
+
+    type Product {
+        _id: ID
+        name: String
+        description: String
+        price: Float
+    }
+
     type User {
         _id: ID
         firstName: String
@@ -51,28 +64,17 @@ const typeDefs = gql`
         orders: Order
     }
 
-    
-    type Order {
-        _id: ID
-        purchaseDate: String
-        product: Product
-    }
+    type Checkout {
+        session: ID
+      }
 
-    type Product {
-        _id: ID
-        name: String
-        description: String
-        price: Float
-    }
 
-    type AuthUser {
+    type Auth {
         token: ID!
         user: User
     }
 
-    type Checkout {
-        session: ID
-      }
+   
 
     type Query {
         me: User
@@ -90,9 +92,9 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID!], image:String): AuthUser
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], image:String): Auth
         updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
-        login(email: String!, password: String!): AuthUser
+        login(email: String!, password: String!): Auth
         addJob(email: String!, description: String!, image:String, skills:[ID!]): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(jobId:ID!): Jobs
@@ -100,9 +102,6 @@ const typeDefs = gql`
         addOrder(product: ID!): Order
         uploadFile(file: Upload!): Image!
     }
-
-
-
 `;
 
 

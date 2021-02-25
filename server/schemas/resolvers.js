@@ -73,21 +73,6 @@ const resolvers = {
         .populate('candidates')
         .populate('matchedCandidates')
     },
-
-    users: async () => {
-      return User.find()
-        .select('-__v')
-        .populate('jobOffers')
-        .populate('applied')
-        .populate('matchedJobs')
-    },
-    user: async (parent, { email }) => {
-      return User.findOne({ email })
-        .select('-__v')
-        .populate('jobOffers')
-        .populate('applied')
-        .populate('matchedJobs')
-    },
     me: async (parent, args, context) => {
       if (context.user) {
         const userData = await User.findOne({ _id: context.user._id })
@@ -98,7 +83,7 @@ const resolvers = {
           .populate('applied')
           .populate('matchedJobs')
           .populate('image')
-          .populate('orders')
+          .populate('orders');
 
         console.log('context', context.user);
         console.log('UserData', userData);
@@ -106,6 +91,20 @@ const resolvers = {
       }
 
       throw new AuthenticationError('Not logged in');
+    },
+    users: async () => {
+      return User.find()
+        .select('-__v')
+        .populate('jobOffers')
+        .populate('applied')
+        .populate('matchedJobs');
+    },
+    user: async (parent, { email }) => {
+      return User.findOne({ email })
+        .select('-__v')
+        .populate('jobOffers')
+        .populate('applied')
+        .populate('matchedJobs');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -188,8 +187,9 @@ const resolvers = {
       );
     },
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
 
+      
+      const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError('Incorrect credentials');
       }
@@ -201,6 +201,8 @@ const resolvers = {
       }
 
       const token = signToken(user);
+      console.log("after login", user);
+      console.log(token);
 
       return { token, user };
     },

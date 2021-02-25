@@ -9,9 +9,30 @@ export const QUERY_SKILLS = gql`
 }
 `;
 
+export const QUERY_ME = gql`
+{
+  me {
+    _id
+    email
+    firstName
+    lastName
+    profileText
+  }
+}
+`;
+
+export const QUERY_ME_BASIC = gql`
+  {
+    me {
+      _id
+      email
+    }
+  }
+`;
+
 export const QUERY_USER = gql`
-query user($email:String) {
-  user(email:$email) {
+query user($email:String!) {
+  user(email: $email) {
     _id
     email
     firstName

@@ -71,6 +71,11 @@ const userSchema = new Schema({
       required: true,
     },
   ],
+},
+{
+  toJSON: {
+    virtuals: true
+  }
 });
 
 // set up pre-save middleware to create password
@@ -104,6 +109,6 @@ userSchema.virtual("skillCount").get(function () {
   return this.skills.length;
 });
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;

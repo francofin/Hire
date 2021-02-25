@@ -4,9 +4,10 @@ const secret = 'bahbsdhbfhkfbskdj,fnkjbgifkbgvdjkdjsf,vkgzgjdfabzdfn,jzbnlkjbnjk
 const expiration = '2h';
 
 module.exports = {
-  signToken: function({ username, email, _id }) {
-    const payload = { username, email, _id };
+  signToken: function({ firstName, lastName, email, _id }) {
+    const payload = { firstName, lastName, email, _id };
 
+    console.log(payload);
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
   authMiddleware: function({ req }) {
@@ -23,7 +24,6 @@ module.exports = {
   
     // if no token, return request object as is
     if (!token) {
-        console.log(token);
       return req;
     }
   

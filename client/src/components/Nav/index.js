@@ -20,7 +20,7 @@ function Nav() {
                         <ul class="nav-menu list-unstyled">
                             <li><Link to="/" className="smoothScroll">Home</Link></li>
                             <li><Link to="/about" className="smoothScroll">About</Link></li>
-                            <li><Link to="/profile" className="smoothScroll">Profile</Link></li>
+                            <li><Link to="/profile" className="smoothScroll">{Auth.getProfile().data.firstName} Profile</Link></li>
                             <li><Link to="/" className="smoothScroll" onClick={() => Auth.logout()}>Logout</Link></li>
                             <li><a href="#contact" className="smoothScroll">Contact</a></li>
                         </ul>

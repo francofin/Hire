@@ -8,32 +8,32 @@ const Footer = () => {
         <div className="socials-media text-center">
           <ul className="list-unstyled">
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-facebook"></i>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-twitter"></i>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-instagram"></i>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-googleplus"></i>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-tumblr"></i>
               </Link>
             </li>
             <li>
-              <Link href="#">
+              <Link to="/">
                 <i className="ion-social-dribbble"></i>
               </Link>
             </li>
@@ -43,7 +43,7 @@ const Footer = () => {
         <p>&copy; Copyrights Folio. All rights reserved.</p>
 
         <div className="credits">
-          <Link href="https://bootstrapmade.com/">BootstrapMade</Link>
+          <Link to="https://bootstrapmade.com/">BootstrapMade</Link>
         </div>
       </div>
     </div>

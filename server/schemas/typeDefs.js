@@ -21,6 +21,7 @@ const typeDefs = gql`
         image: String
         positionFilled: Boolean
         skills:[Skills]
+        role: String
         userInterestCount: Int
         candidateCount: Int
         matchCount: Int
@@ -81,7 +82,7 @@ const typeDefs = gql`
         users: [User]
         user(_id: ID!): User
         job(_id: ID): [Jobs]
-        jobs(skills: ID): [Jobs]
+        jobs(skills: ID, role:String): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         images: [Image]
@@ -95,7 +96,7 @@ const typeDefs = gql`
         addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], image:String): Auth
         updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
         login(email: String!, password: String!): Auth
-        addJob(email: String!, description: String!, image:String, skills:[ID!]): Jobs
+        addJob(email: String!, description: String!, image:String, skills:[ID], role:String!): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(jobId:ID!): Jobs
         showUserInterest(userId:ID!): User

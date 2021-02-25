@@ -128,11 +128,13 @@ export const QUERY_JOBS_BY_SKILL = gql`
     jobs(skills: $skills) {
       _id
       email
+      role
       description
       image
       createdAt
       skills {
         _id
+        name
       }
     }
   }
@@ -144,6 +146,7 @@ export const QUERY_ALL_JOBS = gql`
       _id
       email
       description
+      role
       image
       createdAt
       skills {

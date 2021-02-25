@@ -28,6 +28,10 @@ const jobSchema = new Schema({
     required: true,
     default: false
   },
+  role:{
+    type:String,
+    required: true
+  },
   skills: [{
     type: Schema.Types.ObjectId,
     ref: 'Skills',

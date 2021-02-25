@@ -16,6 +16,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import store from "./utils/store";
+import JobDetail from "./pages/JobDetail";
 const httpLink = createUploadLink({
   uri: "http://localhost:3001/graphql",
 });
@@ -48,6 +49,7 @@ function App() {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/profile/:id?" component={Profile} />
+                <Route exact path="/jobs/:id" component={JobDetail} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />
               </Switch>

@@ -4,6 +4,7 @@ import { UPDATE_JOBS, UPDATE_CURRENT_JOB } from '../../utils/actions';
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_JOBS_BY_SKILL, QUERY_ALL_JOBS } from "../../utils/queries";
 import { useDispatch, useSelector } from 'react-redux';
+import JobItem from "../JobItem";
 
 
 const JobList = () => {
@@ -11,22 +12,30 @@ const JobList = () => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
 
-  const { jobs } = state;
+  const { currentSkill } = state;
 
-  const { loading, data: jobListings } = useQuery(QUERY_ALL_JOBS);
+  const { loading, data} = useQuery(QUERY_JOBS_BY_SKILL);
   
 
   useEffect(() => {
 
-    if (jobListings) {
+    if (data) {
       dispatch({
         type: UPDATE_JOBS,
-        jobs: jobListings.jobs
+        jobs: data.jobs
       })
 
     }
 
-  }, [loading, jobListings, dispatch])
+  }, [loading, data, dispatch]);
+
+  function filterJobs() {
+    if (!currentSkill) {
+      return state.jobs;
+    }
+  
+    return state.jobs.filter(job => job.skill[0]._id === currentSkill);
+  }
 
 
   return (
@@ -46,22 +55,22 @@ const JobList = () => {
           </div>
         </div>
 
-
-        <div className="row portfolio-container">
-          {jobs.map(item => (
-            <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-              <img src={item.image} className="img-fluid" alt="" />
-              <div className="portfolio-info">
-                <h4>{item.skills[0].name}</h4>
-                <p>App</p>
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 1"><i className="bx bx-plus"></i></a>
-                <a href="/" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-              </div>
-            </div>
-
-          ))}
-
-        </div>
+      {state.jobs.length ? (
+          <div className="row portfolio-container">
+            {filterJobs().map(job => (
+              <JobItem
+              key = {job._id}
+              _id = {job._id}
+              image= {job.image}
+              role = {job.role}
+              skills = {job.skills}
+              />
+            ))}
+          </div>
+      ) : (
+        <h3>You haven't added any jobs yet!</h3>
+      )}
+        
       </div>
     </div>
   );

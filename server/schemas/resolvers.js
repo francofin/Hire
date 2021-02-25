@@ -51,11 +51,17 @@ const resolvers = {
       return await Product.find(params);
     },
 
-    jobs: async (parent, { skills }) => {
+    jobs: async (parent, { skills, role }) => {
       const params = {};
 
       if (skills) {
         params.skills = skills;
+      }
+
+      if (role) {
+        params.role = {
+          $regex: role
+        };
       }
 
       return await Jobs.find(params).sort({ createdAt: -1 })

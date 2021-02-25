@@ -12,17 +12,17 @@ function Nav() {
                     <div className="container">
 
                         <div className="logo">
-                            <Link href="/"><img src={bannerLogo} alt="logo" /></Link>
+                            <Link to="/"><img src={bannerLogo} alt="logo" /></Link>
                         </div>
 
                         <div class="responsive"><i data-icon="m" className="ion-navicon-round"></i></div>
 
                         <ul class="nav-menu list-unstyled">
                             <li><Link to="/" className="smoothScroll">Home</Link></li>
-                            <li><Link to="/about" className="smoothScroll">About</Link></li>
+                            <li><Link to="/" className="smoothScroll">About</Link></li>
                             <li><Link to="/profile" className="smoothScroll">{Auth.getProfile().data.firstName}'s Profile</Link></li>
                             <li><Link to="/" className="smoothScroll" onClick={() => Auth.logout()}>Logout</Link></li>
-                            <li><a href="#contact" className="smoothScroll">Contact</a></li>
+                            <li><Link to="/" className="smoothScroll">Contact</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -33,17 +33,17 @@ function Nav() {
                     <div className="container">
 
                         <div className="logo">
-                            <Link href="/"><img src={bannerLogo} alt="logo" /></Link>
+                            <Link to="/"><img src={bannerLogo} alt="logo" /></Link>
                         </div>
 
-                        <div class="responsive"><i data-icon="m" className="ion-navicon-round"></i></div>
+                        <div className="responsive"><i data-icon="m" className="ion-navicon-round"></i></div>
 
-                        <ul class="nav-menu list-unstyled">
+                        <ul className="nav-menu list-unstyled">
                             <li><Link to="/" className="smoothScroll">Home</Link></li>
-                            <li><Link to="/about" className="smoothScroll">About</Link></li>
+                            <li><Link to="/" className="smoothScroll">About</Link></li>
                             <li><Link to="/signup" className="smoothScroll">Sign Up</Link></li>
                             <li><Link to="/login" className="smoothScroll">Login</Link></li>
-                            <li><a href="#contact" className="smoothScroll">Contact</a></li>
+                            <li><Link to="/" className="smoothScroll">Contact</Link></li>
                         </ul>
                     </div>
                 </div>

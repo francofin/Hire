@@ -28,11 +28,11 @@ const jobSchema = new Schema({
     required: true,
     default: false
   },
-  skills: {
+  skills: [{
     type: Schema.Types.ObjectId,
     ref: 'Skills',
     required: true
-  },
+  }],
   applicants: [
     {
     type: Schema.Types.ObjectId,

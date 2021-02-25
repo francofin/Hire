@@ -52,7 +52,7 @@ const JobList = () => {
             <div className="col-lg-4 col-md-6 portfolio-item filter-app">
               <img src={item.image} className="img-fluid" alt="" />
               <div className="portfolio-info">
-                <h4>{item.skills.name}</h4>
+                <h4>{item.skills[0].name}</h4>
                 <p>App</p>
                 <a href="assets/img/portfolio/portfolio-1.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 1"><i className="bx bx-plus"></i></a>
                 <a href="/" className="details-link" title="More Details"><i className="bx bx-link"></i></a>

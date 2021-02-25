@@ -20,7 +20,7 @@ const typeDefs = gql`
         createdAt: String
         image: String
         positionFilled: Boolean
-        skills: Skills
+        skills:[Skills]
         userInterestCount: Int
         candidateCount: Int
         matchCount: Int

@@ -69,7 +69,7 @@ db.once('open', async () => {
         const password = faker.internet.password();
         const profileText = faker.lorem.paragraphs();
         const image = `${faker.image.people()}?random=${Date.now()}`
-        const skills = skillSet[Math.floor(Math.random()*skillSet.length)]._id;
+        const skills = [skillSet[Math.floor(Math.random()*skillSet.length)]._id];
 
         userData.push({ firstName, lastName, email, password, profileText, image, skills })
     }
@@ -92,7 +92,7 @@ db.once('open', async () => {
     for (let i = 0; i < 102; i += 1) {
         const description = faker.lorem.paragraphs();
         const image = `${faker.image.business()}?random=${Date.now()}`
-        const skills = skillSet[randomNumber()]._id;
+        const skills = [skillSet[randomNumber()]._id];
         const positionFilled = faker.random.boolean();
 
         const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);

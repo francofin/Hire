@@ -29,6 +29,10 @@ export const QUERY_ME_BASIC = gql`
       firstName
       lastName
       profileText
+      skills {
+        _id
+        name
+      }
     }
   }
 `;
@@ -50,30 +54,21 @@ query user($id:ID!) {
       description
       positionFilled
       image
-      skills {
-        _id
-        name
-      }
+ 
       createdAt
     }
     applied {
       description
       positionFilled
       image
-      skills {
-        _id
-        name
-      }
+
       createdAt
     }
     matchedJobs {
       description
       positionFilled
       image
-      skills {
-        _id
-        name
-      }
+
       createdAt
     }
   }

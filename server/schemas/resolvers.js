@@ -31,9 +31,8 @@ const processUpload = async (upload) => {
 
 const resolvers = {
   Query: {
-    skills: async (parent, {_id}) => {
-      const params = _id ? { _id } : {};
-      return await Skills.find(params);
+    skills: async (parent, {}) => {
+      return await Skills.find();
     },
     skill: async (parent, { _id }) => {
       return await Skills.findOne(_id);
@@ -98,14 +97,16 @@ const resolvers = {
         .select('-__v')
         .populate('jobOffers')
         .populate('applied')
-        .populate('matchedJobs');
+        .populate('matchedJobs')
+        .populate('skills');
     },
     user: async (parent, { _id }) => {
       return User.findOne({ _id })
         .select('-__v')
         .populate('jobOffers')
         .populate('applied')
-        .populate('matchedJobs');
+        .populate('matchedJobs')
+        .populate('skills');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {

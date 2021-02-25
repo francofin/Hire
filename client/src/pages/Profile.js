@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Redirect } from "react-router-dom";
 import { QUERY_USER, QUERY_ME_BASIC } from "../utils/queries";
+import { UPDATE_OFFERS } from '../utils/actions';
 import {useDispatch, useSelector} from 'react-redux';
 import { useQuery } from '@apollo/react-hooks';
 import Auth from '../utils/auth';
 
 const Profile = () => {
 
-  // const dispatch = useDispatch();
-  // const state = useSelector(state => state);
+  const dispatch = useDispatch();
+  const state = useSelector(state => state);
 
-  // const {users} = state;
+  const {offers} = state;
   const { id: userParam } = useParams();
 
 
@@ -18,11 +19,11 @@ const Profile = () => {
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME_BASIC, {
     variables: { id: userParam }
   });
-  console.log("user data", data);
+  
 
   const user = data?.me || data?.user || {};
  
-
+  // console.log("user data", user.skills);
   // const user = data?.me || data?.user || {};
 
   // if (!user?.email) {
@@ -32,14 +33,23 @@ const Profile = () => {
   //     </h4>
   //   );
   // }
- 
+  useEffect(() => {
+    if(data){
+      dispatch({
+       type: UPDATE_OFFERS,
+       offers: data.user.jobOffers
+      })
+    }
+  }, [loading, data, dispatch])
 
   if (Auth.loggedIn() && Auth.getProfile().data._id=== userParam) {
     return <Redirect to="/profile" />;
   }
 
   // console.log("all user data", Auth.getProfile().data);
-  console.log("all user data222", user);
+  // console.log("all user data222", user.jobOffers);
+
+
 
   // console.log(id);
   // console.log("all user data222", userParam);
@@ -71,14 +81,11 @@ const Profile = () => {
             <img src="assets/img/portfolio/portfolio-details-3.jpg" className="img-fluid" alt=""/>
           </div>
 
-          <div className="portfolio-info">
-            <h3>Project information</h3>
-            <ul>
-              <li><strong>Category</strong>:</li>
-              <li><strong>Client</strong>: ASU Company</li>
-              <li><strong>Project date</strong>: 01 March, 2020</li>
-              <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
-            </ul>
+          <div className="portfolio-description">
+            <h3>Current Job Offers</h3>
+            {offers.map(offer => (
+              <li>{offer.description}</li>
+            ))}
           </div>
 
         </div>

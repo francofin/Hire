@@ -31,11 +31,12 @@ const processUpload = async (upload) => {
 
 const resolvers = {
   Query: {
-    skills: async () => {
-      return await Skills.find();
+    skills: async (parent, {_id}) => {
+      const params = _id ? { _id } : {};
+      return await Skills.find(params);
     },
     skill: async (parent, { _id }) => {
-      return await Skills.findOne({ _id })
+      return await Skills.findOne(_id);
     },
     images: async () => {
       return await Image.find();
@@ -99,8 +100,8 @@ const resolvers = {
         .populate('applied')
         .populate('matchedJobs');
     },
-    user: async (parent, { email }) => {
-      return User.findOne({ email })
+    user: async (parent, { _id }) => {
+      return User.findOne({ _id })
         .select('-__v')
         .populate('jobOffers')
         .populate('applied')

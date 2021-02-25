@@ -26,13 +26,16 @@ export const QUERY_ME_BASIC = gql`
     me {
       _id
       email
+      firstName
+      lastName
+      profileText
     }
   }
 `;
 
 export const QUERY_USER = gql`
-query user($email:String!) {
-  user(email: $email) {
+query user($id:ID!) {
+  user(_id: $id) {
     _id
     email
     firstName
@@ -78,8 +81,8 @@ query user($email:String!) {
 `;
 
 export const QUERY_ALL_USERS = gql`
-  query getusers($email: String) {
-    users(email: $email) {
+  query getusers($id: ID) {
+    users(_id: $ID) {
       _id
     email
     firstName

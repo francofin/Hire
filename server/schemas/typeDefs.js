@@ -3,7 +3,7 @@ const {gql} = require('apollo-server-express');
 const typeDefs = gql`
     type Skills {
         _id: ID
-        name: String
+        name: String!
     }
 
     type Image {
@@ -79,7 +79,7 @@ const typeDefs = gql`
     type Query {
         me: User
         users: [User]
-        user(email: String!): User
+        user(_id: ID!): User
         job(_id: ID): [Jobs]
         jobs(skills: ID): [Jobs]
         order(_id: ID!): Order

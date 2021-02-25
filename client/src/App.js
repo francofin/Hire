@@ -4,7 +4,6 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import ApolloClient from "apollo-boost-upload";
 import {createUploadLink} from 'apollo-upload-client';
 import { InMemoryCache} from 'apollo-cache-inmemory';
-
 // import { StoreProvider } from "./utils/GlobalState";
 import { Provider } from "react-redux";
 import Footer from "./components/Footer";
@@ -48,7 +47,7 @@ function App() {
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/profile/:email?" component={Profile} />
+                <Route exact path="/profile/:id?" component={Profile} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />
               </Switch>

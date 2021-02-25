@@ -11,14 +11,15 @@ const Profile = () => {
   // const state = useSelector(state => state);
 
   // const {users} = state;
-  const { email: userParam } = useParams();
-  console.log(userParam)
+  const { id: userParam } = useParams();
+
+
 
   const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME_BASIC, {
-    variables: { email: userParam }
+    variables: { id: userParam }
   });
+  console.log("user data", data);
 
-  console.log(data);
   const user = data?.me || data?.user || {};
  
 
@@ -33,47 +34,47 @@ const Profile = () => {
   // }
  
 
-  if (Auth.loggedIn() && Auth.getProfile().data.email=== userParam) {
+  if (Auth.loggedIn() && Auth.getProfile().data._id=== userParam) {
     return <Redirect to="/profile" />;
   }
 
   // console.log("all user data", Auth.getProfile().data);
-  console.log("all user data222", data);
+  console.log("all user data222", user);
 
   // console.log(id);
   // console.log("all user data222", userParam);
     return (
       <main id="main">
 
-    <section class="breadcrumbs">
-      <div class="container">
+    <section className="breadcrumbs">
+      <div className="container">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <div className="d-flex justify-content-between align-items-center">
           <h2>Portfolio Details</h2>
           <ol>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Portfolio</a></li>
             <li>Portfolio Details</li>
           </ol>
         </div>
 
       </div>
     </section>
-    <section class="portfolio-details">
-      <div class="container">
+    <section className="portfolio-details">
+      <div className="container">
 
-        <div class="portfolio-details-container">
+        <div className="portfolio-details-container">
 
-          <div class="owl-carousel portfolio-details-carousel">
-            <img src="assets/img/portfolio/portfolio-details-1.jpg" class="img-fluid" alt=""/>
-            <img src="assets/img/portfolio/portfolio-details-2.jpg" class="img-fluid" alt=""/>
-            <img src="assets/img/portfolio/portfolio-details-3.jpg" class="img-fluid" alt=""/>
+          <div className="owl-carousel portfolio-details-carousel">
+            <img src="assets/img/portfolio/portfolio-details-1.jpg" className="img-fluid" alt=""/>
+            <img src="assets/img/portfolio/portfolio-details-2.jpg" className="img-fluid" alt=""/>
+            <img src="assets/img/portfolio/portfolio-details-3.jpg" className="img-fluid" alt=""/>
           </div>
 
-          <div class="portfolio-info">
+          <div className="portfolio-info">
             <h3>Project information</h3>
             <ul>
-              <li><strong>Category</strong>: Web design</li>
+              <li><strong>Category</strong>:</li>
               <li><strong>Client</strong>: ASU Company</li>
               <li><strong>Project date</strong>: 01 March, 2020</li>
               <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
@@ -82,10 +83,10 @@ const Profile = () => {
 
         </div>
 
-        <div class="portfolio-description">
-          <h2>This is an example of portfolio detail</h2>
+        <div className="portfolio-description">
+          <h2>About {user.firstName} {user.lastName}</h2>
           <p>
-            Autem ipsum nam porro corporis rerum. Quis eos dolorem eos itaque inventore commodi labore quia quia. Exercitationem repudiandae officiis neque suscipit non officia eaque itaque enim. Voluptatem officia accusantium nesciunt est omnis tempora consectetur dignissimos. Sequi nulla at esse enim cum deserunt eius.
+            {user.profileText}
           </p>
         </div>
       </div>

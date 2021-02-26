@@ -64,13 +64,12 @@ const userSchema = new Schema({
       ref: "Jobs",
     },
   ],
-  skills: [
+  skills: 
     {
       type: Schema.Types.ObjectId,
       ref: "Skills",
       required: true,
     },
-  ],
 },
 {
   toJSON: {

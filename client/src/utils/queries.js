@@ -54,14 +54,14 @@ query user($id:ID!) {
       description
       positionFilled
       image
- 
+      role
       createdAt
     }
     applied {
       description
       positionFilled
       image
-
+      role
       createdAt
     }
     matchedJobs {

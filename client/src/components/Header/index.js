@@ -8,8 +8,8 @@ const Header = () => {
 
     <div className="container">
       <div className="hero-content">
-        <h1>I'm <span className="typed"></span></h1>
-        <p className="typed-items" data-typed-person="Alex Smith">Designer, Developer, Freelancer, Photographer</p>
+        <h1>H!re <span className="typed"></span></h1>
+        <p className="typed-items" data-typed-person="">Designer, Developer, Freelancer, Photographer</p>
 
         <ul className="list-unstyled list-social">
           <li><Link to="/"><i className="ion-social-facebook"></i></Link></li>

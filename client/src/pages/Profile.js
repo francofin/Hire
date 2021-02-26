@@ -42,6 +42,8 @@ const Profile = () => {
     }
   }, [loading, data, dispatch])
 
+  console.log(offers);
+
   if (Auth.loggedIn() && Auth.getProfile().data._id=== userParam) {
     return <Redirect to="/profile" />;
   }
@@ -81,11 +83,15 @@ const Profile = () => {
             <img src="assets/img/portfolio/portfolio-details-3.jpg" className="img-fluid" alt=""/>
           </div>
 
-          <div className="portfolio-description">
+          
+
+          <div className="portfolio-info">
             <h3>Current Job Offers</h3>
+            <ul>
             {offers.map(offer => (
-              <li>{offer.description}</li>
+              <li>{offer.role}: {offer.skill}</li>
             ))}
+            </ul>
           </div>
 
         </div>

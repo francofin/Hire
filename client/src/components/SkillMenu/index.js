@@ -3,6 +3,7 @@ import { UPDATE_SKILLS, UPDATE_CURRENT_SKILL } from '../../utils/actions';
 import { useQuery } from '@apollo/react-hooks';
 import { QUERY_SKILLS } from "../../utils/queries";
 import { useDispatch, useSelector } from 'react-redux';
+import { idbPromise } from '../../utils/helpers';
 
 function SkillMenu() {
     const dispatch = useDispatch();
@@ -20,18 +21,19 @@ function SkillMenu() {
                 type: UPDATE_SKILLS,
                 skills: skillData.skills
             });
-            //   skillData.skills.forEach(skill => {
-            //     idbPromise('categories', 'put', skill);
-            //   });
+            
+              skillData.skills.forEach(skill => {
+                idbPromise('skills', 'put', skill);
+              });
         }
-        // else if (!loading) {
-        //   idbPromise('categories', 'get').then(categories => {
-        //     dispatch({
-        //       type: UPDATE_CATEGORIES,
-        //       categories: categories
-        //     });
-        //   });
-        // }
+        else if (!loading) {
+          idbPromise('skills', 'get').then(skills => {
+            dispatch({
+              type: UPDATE_SKILLS,
+              skills: skills
+            });
+          });
+        }
     }, [skillData, loading, dispatch]);
 
     const handleClick = id => {
@@ -42,10 +44,9 @@ function SkillMenu() {
     };
     return (
         <ul id="portfolio-flters">
-            <li data-filter="*" className="filter-active">All</li>
+            <li className="filter-active"></li>
             {skills.map(item => (
                 <li key={item._id}
-                    data-filter=".filter-${item.name}"
                     onClick={() => {
                     handleClick(item._id);
                     }}

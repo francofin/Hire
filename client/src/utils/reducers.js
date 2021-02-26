@@ -22,7 +22,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_JOBS:
             return {
                 ...state,
-                jobs: [...action.jobs],
+                jobs: [...action.jobs]
             };
 
         case UPDATE_CURRENT_JOB:
@@ -35,7 +35,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_SKILLS:
             return {
                 ...state,
-                skills: [...action.skills],
+                skills: [...action.skills]
             };
 
         case UPDATE_CURRENT_SKILL:

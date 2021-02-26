@@ -18,7 +18,7 @@ import Header from "./components/Header";
 import store from "./utils/store";
 import JobDetail from "./pages/JobDetail";
 const httpLink = createUploadLink({
-  uri: "http://localhost:3001/graphql",
+  uri: "graphql",
 });
 
 const client = new ApolloClient({

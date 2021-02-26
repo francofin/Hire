@@ -52,7 +52,7 @@ function Nav() {
     }
 
     return (
-        <nav id="main-nav" className="subpage-nav">
+        <nav id="main-nav">
             {showNavigation()}
         </nav>
     );

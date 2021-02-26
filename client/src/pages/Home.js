@@ -6,7 +6,9 @@ import Auth from '../utils/auth';
 const Home = () => {
 
   return (
-    <JobList></JobList>
+    <main id="main">
+      <JobList></JobList>
+    </main>
   );
 };
 

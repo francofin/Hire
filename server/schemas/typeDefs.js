@@ -42,6 +42,7 @@ const typeDefs = gql`
         name: String
         description: String
         price: Float
+        quantity: Int
     }
 
     type User {
@@ -86,7 +87,7 @@ const typeDefs = gql`
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         images: [Image]
-        product(_id: ID!): Product
+        product(_id: ID): Product
         skills: [Skills]
         skill(_id:ID): Skills
         uploads: [Image]

@@ -110,7 +110,7 @@ function Signup(props) {
   return (
     <div id="contact" className="paddsection">
       <div className="container">
-        <div class="contact-block1">
+        <div className="contact-block1">
           <div className="row">
             <div className="col-lg-6">
               <div className="contact-contact">
@@ -244,10 +244,10 @@ function Signup(props) {
                     ))}
                   </div>
 
-                  <div class="col-lg-12">
-                    <div class="form-group">
+                  <div className="col-lg-12">
+                    <div className="form-group">
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         name="profileText"
                         rows="20"
                         id="profileText"

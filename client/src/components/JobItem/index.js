@@ -1,8 +1,4 @@
 import React, { useEffect } from 'react';
-import SkillMenu from '../SkillMenu';
-import { UPDATE_JOBS, UPDATE_CURRENT_JOB } from '../../utils/actions';
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_JOBS_BY_SKILL, QUERY_ALL_JOBS } from "../../utils/queries";
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 

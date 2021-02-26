@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import About from "./pages/About";
 import Header from "./components/Header";
 import store from "./utils/store";
 import JobDetail from "./pages/JobDetail";
@@ -42,18 +43,16 @@ function App() {
         <div>
           <Provider store={store}>
             <Nav />
-            <Header />
-            <main id="main">
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path="/about" component={About} />
                 <Route exact path="/profile/:id?" component={Profile} />
                 <Route exact path="/jobs/:id" component={JobDetail} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />
               </Switch>
-            </main>
             <Footer />
           </Provider>
         </div>

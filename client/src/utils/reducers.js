@@ -4,7 +4,13 @@ import {
     UPDATE_SKILLS,
     UPDATE_CURRENT_SKILL,
     UPDATE_OFFERS,
-    UPDATE_CURRENT_USER
+    UPDATE_CURRENT_USER,
+    CLEAR_CART,
+    TOGGLE_CART,
+    ADD_TO_CART,
+    REMOVE_FROM_CART,
+    UPDATE_PRODUCT,
+    UPDATE_CART_QUANTITY
 } from './actions';
 
 
@@ -14,6 +20,8 @@ const initialState = {
     currentSkill: '',
     currentJob: '',
     offers: [],
+    cart: [],
+    product: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -53,6 +61,55 @@ export const reducers = (state = initialState, action) => {
             return {
                 ...state,
                 cuurentUser: action.currentUser
+            };
+
+        case ADD_TO_CART:
+            return {
+                ...state,
+                cartOpen: true,
+                cart: [...state.cart, action.product]
+            };
+
+        case REMOVE_FROM_CART:
+            let newState = state.cart.filter(product => {
+                return product._id !== action._id;
+            });
+
+            return {
+                ...state,
+                cartOpen: newState.length > 0,
+                cart: newState
+            };
+
+        case UPDATE_CART_QUANTITY:
+            return {
+                ...state,
+                cartOpen: true,
+                cart: state.cart.map(product => {
+                    if (action._id === product._id) {
+                        product.purchaseQuantity = action.purchaseQuantity;
+                    }
+                    return product;
+                })
+            };
+
+        case CLEAR_CART:
+            return {
+                ...state,
+                cartOpen: false,
+                cart: []
+            };
+
+        case TOGGLE_CART:
+            return {
+                ...state,
+                cartOpen: !state.cartOpen
+            };
+
+        case UPDATE_PRODUCT:
+            return {
+                ...state,
+                product: [...action.product],
             };
 
 

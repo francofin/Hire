@@ -155,3 +155,23 @@ export const QUERY_ALL_JOBS = gql`
     }
   }
 `;
+
+export const QUERY_CHECKOUT = gql`
+  query getCheckout($products: ID!) {
+    checkout(products: $products) {
+      session
+    }
+  }
+`;
+
+export const QUERY_PRODUCT = gql`
+{
+  product {
+    _id
+    name
+    description
+    price
+    quantity
+  }
+}
+`;

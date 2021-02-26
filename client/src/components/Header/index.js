@@ -1,15 +1,18 @@
-import React, { useState } from "react";
-import { Link, useParams, Redirect } from "react-router-dom";
-// import homeimage from "../../assets/images/employeeproduct.jpg";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
-const Header = () => {
+
+
+const Header = (prop) => {
+  const {image, role, firstName, lastName, _id, email, skill} = prop;
+
   return (
-    <div id="hero" className="home">
+    <div id="hero" className="home" style={{backgroundImage: `url(${image})`}}>
 
     <div className="container">
       <div className="hero-content">
-        <h1>H!re <span className="typed"></span></h1>
-        <p className="typed-items" data-typed-person="">Designer, Developer, Freelancer, Photographer</p>
+        <h1>{role} {firstName} {lastName}<span className="typed"></span></h1>
+        <p className="typed-items" data-typed-person={skill}></p>
 
         <ul className="list-unstyled list-social">
           <li><Link to="/"><i className="ion-social-facebook"></i></Link></li>

@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import JobItem from "../JobItem";
 import spinner from '../../assets/spinner.gif';
 import { idbPromise } from "../../utils/helpers";
+import Header from '../Header';
+import homeimage from "../../assets/images/employeeproduct.jpg";
 
 
 function JobList()  {
@@ -46,6 +48,7 @@ function JobList()  {
 
   console.log(currentSkill);
 
+
   function filterJobs() {
     if (!currentSkill) {
       return state.jobs;
@@ -54,9 +57,13 @@ function JobList()  {
     return state.jobs.filter(job => job.skills._id === currentSkill);
   }
 
+  const imageDisplayed = homeimage;
+  const roleDisplayed = "H!red";
 
   return (
-    <div id="portfolio" className="paddsection">
+    <section style={{margin:0}}>
+      <Header image={imageDisplayed} role={roleDisplayed}></Header>
+      <div id="portfolio" className="paddsection">
       <div className="container">
         <div className="section-title text-center">
           <h2>Browse Jobs</h2>
@@ -90,6 +97,8 @@ function JobList()  {
        
       
     </div>
+    </section>
+    
   );
 };
 

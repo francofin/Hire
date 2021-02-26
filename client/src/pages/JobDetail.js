@@ -5,6 +5,7 @@ import { QUERY_JOBS_BY_SKILL } from "../utils/queries";
 import {useDispatch, useSelector} from 'react-redux';
 import { idbPromise } from "../utils/helpers";
 import spinner from '../assets/spinner.gif';
+import Header from '../components/Header';
 import {
   UPDATE_JOBS,
 } from '../utils/actions';
@@ -25,7 +26,7 @@ const JobDetail = () => {
   useEffect(() => {
     // already in global store
     if (jobs.length) {
-      setCurrentJob(jobs.find(jobs => jobs._id === id));
+      setCurrentJob(jobs.find(job => job._id === id));
     } 
     // retrieved from server
     else if (data) {
@@ -40,12 +41,19 @@ const JobDetail = () => {
   // if(currentJob.skills[0]) {
   //   console.log(currentJob.skills[0])
   // }
-  // console.log(currentJob)
+  console.log(currentJob)
 
 
     return (
-    <>
+      <section style={{margin:0}}>
+        <Header 
+        image={currentJob.image}
+        role = {currentJob.role}
+        skill = {currentJob.skill}
+        ></Header>
+        <>
       {currentJob ? (
+        
         <main id="main">
 
         <section className="breadcrumbs">
@@ -90,6 +98,8 @@ const JobDetail = () => {
       }
       
     </>
+      </section>
+    
     );
   };
   

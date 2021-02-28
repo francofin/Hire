@@ -31,7 +31,16 @@ const client = new ApolloClient({
       },
     });
   },
-  cache: new InMemoryCache,
+  cache: new InMemoryCache({
+    typePolicies: {
+      Skills: {
+        keyFields: []
+      },
+      Images: {
+        keyFields: ["id", "filename", "path"]
+      }
+    }
+  }),
   link: httpLink,
   // uri: "/graphql",
 });

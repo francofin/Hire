@@ -10,7 +10,8 @@ import {
     ADD_TO_CART,
     REMOVE_FROM_CART,
     UPDATE_PRODUCT,
-    UPDATE_CART_QUANTITY
+    UPDATE_CART_QUANTITY,
+    UPDATE_IMAGE
 } from './actions';
 
 
@@ -21,7 +22,8 @@ const initialState = {
     currentJob: '',
     offers: [],
     cart: [],
-    product: []
+    product: [],
+    image: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -110,6 +112,12 @@ export const reducers = (state = initialState, action) => {
             return {
                 ...state,
                 product: [...action.product],
+            };
+
+        case UPDATE_IMAGE:
+            return {
+                ...state,
+                image: [...action.image]
             };
 
 

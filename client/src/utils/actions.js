@@ -10,4 +10,5 @@ export const CLEAR_CART = 'CLEAR_CART';
 export const TOGGLE_CART = 'TOGGLE_CART';
 export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const UPDATE_CART_QUANTITY = 'UPDATE_CART_QUANTITY';
+export const UPDATE_IMAGE = 'UPDATE_IMAGE';
 // export const REMOVE_FROM_CART = 'REMOVE_FROM_CART';

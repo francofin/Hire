@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { ADD_USER, UPLOAD_MUTATION } from "../utils/mutations";
-import { UPDATE_SKILLS, UPDATE_CURRENT_SKILL } from "../utils/actions";
+import { UPDATE_SKILLS, UPDATE_IMAGE } from "../utils/actions";
 import { useQuery } from "@apollo/react-hooks";
-import { QUERY_SKILLS } from "../utils/queries";
+import { QUERY_SKILLS, QUERY_IMAGE } from "../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
 import { useDropzone } from 'react-dropzone';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { Link } from "react-router-dom";
 import Auth from "../utils/auth";
 
@@ -13,10 +14,31 @@ function Signup(props) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
+
   const [formState, setFormState] = useState({ email: '', password: '', firstName: '', lastName: '', profileText:'' });
   const [addUser] = useMutation(ADD_USER);
   const [file, setFile] = useState({});
-  const [uploadFile] = useMutation(UPLOAD_MUTATION);
+
+  
+  const [uploadFile, {data: mutationData}] = useMutation(UPLOAD_MUTATION, {
+    refetchQueries: [{query: QUERY_IMAGE}]
+  });
+
+  // const {  data:imageData } = useQuery(QUERY_IMAGE);
+  // console.log("images uploaded", imageData);
+
+  if(mutationData){
+    console.log(mutationData.uploadFile.id);
+  };
+  
+
+  // const user_image_id = [];
+
+  // for (let i=0; i< imageData.length; i+=1) {
+  //   if( imageData.images[i].id === mutationData.uploadFile.id){
+  //     user_image_id.push()
+  //   }
+  // }
 
   const handleUpload = async (event) => {
     event.preventDefault();
@@ -25,11 +47,16 @@ function Signup(props) {
       uploadFile({
         variables:  {file }
       });
+
+
       setFile({})
     };
+    
     console.log("uploaded file", file)
     return file;
   };
+  
+
 
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/*',
@@ -53,6 +80,7 @@ function Signup(props) {
     useEffect(() => () => {
         URL.revokeObjectURL(file.preview)
     }, [file]);
+
 
 
 
@@ -84,15 +112,19 @@ function Signup(props) {
 
 
 
+
+
   const handleFormSubmit = async event => {
     event.preventDefault();
-    const image = handleUpload();
+ 
+
     
+
     const mutationResponse = await addUser({
       variables: {
         email: formState.email, password: formState.password,
         firstName: formState.firstName, lastName: formState.lastName, 
-        profileText: formState.profileText, skills: formState.skills
+        profileText: formState.profileText, skills: formState.skills, upload: mutationData.uploadFile.id
       }
     });
     const token = mutationResponse.data.addUser.token;

@@ -140,6 +140,18 @@ export const QUERY_JOBS_BY_SKILL = gql`
   }
 `;
 
+export const QUERY_IMAGE = gql`
+  {
+    images {
+      id
+      filename
+      path
+    }
+  } 
+`;
+
+
+
 export const QUERY_ALL_JOBS = gql`
   {
     jobs {
@@ -175,3 +187,4 @@ export const QUERY_PRODUCT = gql`
   }
 }
 `;
+

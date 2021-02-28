@@ -40,6 +40,9 @@ const resolvers = {
     images: async () => {
       return await Image.find();
     },
+    uploads: async (parent, { _id }) => {
+      return await Image.findOne(_id);
+    },
     product: async (parent, { name }) => {
       const params = {};
       if (name) {
@@ -104,7 +107,8 @@ const resolvers = {
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
-        .populate('skills');
+        .populate('skills')
+        .populate('upload');
     },
     user: async (parent, { _id }) => {
       return User.findOne({ _id })
@@ -112,7 +116,8 @@ const resolvers = {
         .populate('jobOffers')
         .populate('applied')
         .populate('matchedJobs')
-        .populate('skills');
+        .populate('skills')
+        .populate('upload');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -174,16 +179,25 @@ const resolvers = {
       const upload = await processUpload(file);
       // console.log(upload);
       const uploadedFile = await Image.create(upload);
-      console.log(uploadedFile);
+      console.log("uploaded file", uploadedFile);
       return uploadedFile;
     },
     addUser: async (parent, args) => {
-  
+
         // console.log(args);
-        const user = await User.create(args);
+        const user = await User.create({
+          firstName: args.firstName,
+          lastName: args.lastName,
+          email: args.email,
+          password: args.password,
+          profileText: args.profileText,
+          skills: args.skills,
+          upload: args.upload
+        });
         const token = signToken(user);
 
-        // console.log(user);
+        console.log(args);
+        console.log(user);
 
       return { token, user };
     },

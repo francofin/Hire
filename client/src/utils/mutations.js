@@ -15,8 +15,8 @@ export const LOGIN = gql`
 
 
 export const ADD_USER = gql`
-  mutation addUser($firstName: String!, $lastName:String!, $email:String!, $password: String!, $profileText: String!, $skills: [ID], $image:String) {
-    addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, profileText: $profileText, skills: $skills, image: $image) {
+  mutation addUser($firstName: String!, $lastName:String!, $email:String!, $password: String!, $profileText: String!, $skills: [ID], $upload:ID) {
+    addUser(firstName: $firstName, lastName: $lastName, email: $email, password: $password, profileText: $profileText, skills: $skills, upload: $upload) {
       token
       user {
         _id
@@ -25,6 +25,7 @@ export const ADD_USER = gql`
     }
   }
 `;
+
 
 export const UPLOAD_MUTATION = gql`
   mutation uploadFile($file: Upload!) {

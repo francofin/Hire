@@ -165,7 +165,7 @@ function Signup(props) {
             </div>
 
             <div className="col-lg-6">
-              <form onSubmit={handleFormSubmit} className="php-email-form" enctype="multipart/form-data">
+              <form onSubmit={handleFormSubmit} className="php-email-form" encType="multipart/form-data">
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group contact-block1">
@@ -259,14 +259,11 @@ function Signup(props) {
 
                   <div className="col-lg-12" style={{ paddingBottom: 20 }}>
                     {skills.map((skill) => (
-                      <div className="form-check contact-block1">
+                      <div key={skill._id} className="form-check">
                         <input
-                          key={skill._id}
                           type="checkbox"
                           name="skills"
                           className="form-check-input"
-                          id="firstName"
-                          placeholder="First Name"
                           value={skill._id}
                           onChange={handleChange}
                         />
@@ -285,7 +282,7 @@ function Signup(props) {
                         placeholder="Please tell us about yourself and your job experience. Include as much detail as you can."
                         onChange={handleChange}
                       ></textarea>
-                      <div class="validate"></div>
+                      <div className="validate"></div>
                     </div>
                   </div>
 

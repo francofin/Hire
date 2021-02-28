@@ -23,6 +23,10 @@ const jobSchema = new Schema({
   image: {
     type: String
   },
+  upload: {
+    type: Schema.Types.ObjectId,
+    ref: "Image"
+  },
   positionFilled: {
     type: Boolean,
     required: true,

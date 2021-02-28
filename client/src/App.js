@@ -15,11 +15,10 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Header from "./components/Header";
 import store from "./utils/store";
 import JobDetail from "./pages/JobDetail";
 const httpLink = createUploadLink({
-  uri: "graphql",
+  uri: "/graphql",
 });
 
 const client = new ApolloClient({

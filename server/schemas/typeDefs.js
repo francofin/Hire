@@ -23,10 +23,11 @@ const typeDefs = gql`
         skills: Skills
         role: String
         userInterestCount: Int
-        candidateCount: Int
         matchCount: Int
         applicants: [User]
+        applicantCount: Int
         candidates: [User]
+        candidateCount: Int
         matchedCandidates: [User]
         
     }
@@ -62,7 +63,6 @@ const typeDefs = gql`
         jobCount: Int
         offerCount: Int
         matchedJobCount: Int
-        applicantCount: Int
         skillCount: Int
         orders: Order
     }
@@ -95,9 +95,9 @@ const typeDefs = gql`
 
     type Mutation {
         addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], upload:ID): Auth
-        updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
+        updateUser(firstName: String, lastName: String, email: String, password: String, profileText: String, upload:ID): User
         login(email: String!, password: String!): Auth
-        addJob(email: String!, description: String!, image:String, skills:[ID], role:String!): Jobs
+        addJob(email: String!, description: String!, upload:ID, skills:[ID], role:String!): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(jobId:ID!): Jobs
         showUserInterest(userId:ID!): User

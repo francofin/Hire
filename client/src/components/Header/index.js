@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 
 const Header = (prop) => {
-  const {image, role, firstName, lastName, _id, email, skill} = prop;
+  const {image, upload, role, firstName, lastName, _id, email, skill} = prop;
 
   return (
     <div id="hero" className="home" style={{backgroundImage: `url(${image})`}}>

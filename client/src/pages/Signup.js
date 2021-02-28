@@ -51,8 +51,7 @@ function Signup(props) {
 
       setFile({})
     };
-    
-    console.log("uploaded file", file)
+  
     return file;
   };
   
@@ -97,13 +96,13 @@ function Signup(props) {
         skills: skillData.skills,
       });
       //   skillData.skills.forEach(skill => {
-      //     idbPromise('categories', 'put', skill);
+      //     idbPromise('skills', 'put', skill);
       //   });
     }
     // else if (!loading) {
-    //   idbPromise('categories', 'get').then(categories => {
+    //   idbPromise('skills', 'get').then(categories => {
     //     dispatch({
-    //       type: UPDATE_CATEGORIES,
+    //       type: UPDATE_SKILLS,
     //       categories: categories
     //     });
     //   });

@@ -92,6 +92,7 @@ const resolvers = {
           .populate('applied')
           .populate('matchedJobs')
           .populate('image')
+          .populate('upload')
           .populate('orders');
 
         console.log('context', context.user);
@@ -108,15 +109,15 @@ const resolvers = {
         .populate('applied')
         .populate('matchedJobs')
         .populate('skills')
+        .populate('image')
         .populate('upload');
     },
     user: async (parent, { _id }) => {
       return User.findOne({ _id })
         .select('-__v')
-        .populate('jobOffers')
-        .populate('applied')
         .populate('matchedJobs')
         .populate('skills')
+        .populate('image')
         .populate('upload');
     },
     order: async (parent, { _id }, context) => {
@@ -230,7 +231,13 @@ const resolvers = {
     },
     addJob: async (parent, args, context) => {
       if (context.user) {
-        const job = await Jobs.create({ ...args, email: context.user.email });
+        const job = await Jobs.create({
+          email: args.email,
+          description: args.description,
+          role: args.role,
+          skills: args.skills,
+          upload: args.upload
+        });
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },

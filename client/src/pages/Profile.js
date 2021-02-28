@@ -7,12 +7,17 @@ import Cart from '../components/Cart';
 import Auth from '../utils/auth';
 import Header from '../components/Header';
 import { idbPromise } from "../utils/helpers";
+import spinner from '../assets/spinner.gif';
 import {
   REMOVE_FROM_CART,
   ADD_TO_CART,
   UPDATE_OFFERS,
+  UPDATE_IMAGE,
   UPDATE_PRODUCT,
 } from '../utils/actions';
+
+
+
 
 const Profile = () => {
 
@@ -22,20 +27,24 @@ const Profile = () => {
   const { offers, product, cart } = state;
   const { id: userParam } = useParams();
 
-  const [currentProduct, setCurrentProduct] = useState({})
+  const [currentProduct, setCurrentProduct] = useState({});
+  
 
   const { productData } = useQuery(QUERY_PRODUCT);
 
   console.log("all products", productData)
-
-  const { loading, data } = useQuery(userParam ? QUERY_USER : QUERY_ME_BASIC, {
+  const [currentupload, setCurrentupload] = useState({});
+  const [userImagev2, setUserIMage] = useState({});
+  const { loading, data:userData } = useQuery(userParam ? QUERY_USER : QUERY_ME_BASIC, {
     variables: { id: userParam }
   });
 
 
-  const user = data?.me || data?.user || {};
+  const user = userData?.me || userData?.user || {};
 
-  // console.log("user data", user.skills);
+
+
+  console.log("user data", user);
   // const user = data?.me || data?.user || {};
 
   // if (!user?.email) {
@@ -45,14 +54,16 @@ const Profile = () => {
   //     </h4>
   //   );
   // }
+
+
   useEffect(() => {
-    if (data) {
-      dispatch({
-        type: UPDATE_OFFERS,
-        offers: data.user.jobOffers
-      })
+    if (userData) {
+      setCurrentupload(require(`../assets/images/${userData.me.upload.path.split("/")[5]}`))
+      console.log("meconsol", userData.me.upload.path.split("/"));
     }
-  }, [loading, data, dispatch]);
+  }, [ userData, setCurrentupload ]);
+
+  
 
   // useEffect(() => {
   //   // already in global store
@@ -81,11 +92,11 @@ const Profile = () => {
   //   }
   // }, [product, productData, loading, dispatch]);
 
-  console.log(data);
 
   if (Auth.loggedIn() && Auth.getProfile().data._id === userParam) {
     return <Redirect to="/profile" />;
   }
+  
 
   // const addToCart = () => {
   //   const itemInCart = cart.find((cartItem) => cartItem._id === id)
@@ -110,16 +121,22 @@ const Profile = () => {
   //     idbPromise('cart', 'put', { ...currentProduct });
   //   }
   // }
+console.log("the currentest upload", currentupload.default );
+// const imageforspot =  import(`../assets/images/${currentupload[5]}`).then((image) => console.log(image));
+// console.log( imageforspot);
+
+
+
 
   return (
+    
     <section style={{ margin: 0 }}>
+
       <Header
-        image={user.image}
+       image ={currentupload.default} 
         firstName={user.firstName}
         lastName={user.lastName}
-        skill={user.skills}
       ></Header>
-
       <main id="main">
         <section className="breadcrumbs">
           <div className="container">
@@ -128,7 +145,7 @@ const Profile = () => {
               <h2>Portfolio Details</h2>
               <ol>
                 <li><Link to="/">Home</Link></li>
-                <li><Link ro="/">Portfolio</Link></li>
+                <li><Link to="/">Portfolio</Link></li>
                 <li>Portfolio Details</li>
               </ol>
             </div>
@@ -144,9 +161,9 @@ const Profile = () => {
               <div className="portfolio-info">
                 <h3>Current Job Offers</h3>
                 <ul>
-                  {offers.map(offer => (
-                    <li>{offer.role}: {offer.skill}</li>
-                  ))}
+                  {/* {offers.map(offer => ( */}
+                    {/* <li>{offer.role}: {offer.skill}</li> */}
+                  {/* ))} */}
                   {/* <button onClick={addToCart}>Purchase Premium</button>
                   <button
                     disabled={!cart.find(p => p._id === currentProduct._id)}

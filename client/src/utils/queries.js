@@ -29,6 +29,10 @@ export const QUERY_ME_BASIC = gql`
       firstName
       lastName
       profileText
+      upload{
+        id
+        path
+      }
       skills {
         _id
         name

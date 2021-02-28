@@ -8,7 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useDropzone } from 'react-dropzone';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { Link } from "react-router-dom";
+import Header from '../components/Header';
 import Auth from "../utils/auth";
+import homeimage from "../assets/images/employeeproduct.jpg";
+
 
 function Signup(props) {
   const dispatch = useDispatch();
@@ -31,14 +34,6 @@ function Signup(props) {
     console.log(mutationData.uploadFile.id);
   };
   
-
-  // const user_image_id = [];
-
-  // for (let i=0; i< imageData.length; i+=1) {
-  //   if( imageData.images[i].id === mutationData.uploadFile.id){
-  //     user_image_id.push()
-  //   }
-  // }
 
   const handleUpload = async (event) => {
     event.preventDefault();
@@ -138,7 +133,12 @@ function Signup(props) {
     });
   };
 
+  const imageDisplayed = homeimage;
+  const roleDisplayed = "H!red";
+
   return (
+    <section style={{margin:0}}>
+      <Header image={imageDisplayed} role={roleDisplayed}></Header>
     <div id="contact" className="paddsection">
       <div className="container">
         <div className="contact-block1">
@@ -300,6 +300,7 @@ function Signup(props) {
         </div>
       </div>
     </div>
+    </section>
   );
 }
 

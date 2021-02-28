@@ -11,8 +11,8 @@ const Header = (prop) => {
 
     <div className="container">
       <div className="hero-content">
-        <h1>{role} {firstName} {lastName}<span className="typed"></span></h1>
-        <p className="typed-items" data-typed-person={skill}></p>
+        <h1 style={{color: 'black'}}>{firstName} {lastName}<span></span></h1>
+        <p className="typed-items" data-typed-person={role}>None</p>
 
         <ul className="list-unstyled list-social">
           <li><Link to="/"><i className="ion-social-facebook"></i></Link></li>

@@ -26,7 +26,7 @@ server.applyMiddleware({app});
 app.use(express.urlencoded({extended: false}));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, './images')));
 app.use(cors('*'));
 
 // Serve up static assets

@@ -18,7 +18,7 @@ import About from "./pages/About";
 import store from "./utils/store";
 import JobDetail from "./pages/JobDetail";
 const httpLink = createUploadLink({
-  uri: "/graphql",
+  uri: "graphql",
 });
 
 const client = new ApolloClient({
@@ -36,7 +36,7 @@ const client = new ApolloClient({
         keyFields: []
       },
       Images: {
-        keyFields: ["id", "filename", "path"]
+        keyFields: ["id", "filename",]
       }
     }
   }),

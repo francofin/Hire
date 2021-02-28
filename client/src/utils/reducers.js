@@ -23,7 +23,7 @@ const initialState = {
     offers: [],
     cart: [],
     product: [],
-    image: []
+    upload: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -117,7 +117,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_IMAGE:
             return {
                 ...state,
-                image: [...action.image]
+                upload: action.upload
             };
 
 

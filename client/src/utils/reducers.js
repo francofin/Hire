@@ -3,8 +3,16 @@ import {
     UPDATE_CURRENT_JOB,
     UPDATE_SKILLS,
     UPDATE_CURRENT_SKILL,
-    UPDATE_USERS,
-    UPDATE_CURRENT_USER
+    UPDATE_OFFERS,
+    UPDATE_CURRENT_USER,
+    CLEAR_CART,
+    TOGGLE_CART,
+    ADD_TO_CART,
+    REMOVE_FROM_CART,
+    UPDATE_PRODUCT,
+    UPDATE_CART_QUANTITY,
+    UPDATE_USER_JOBS,
+    UPDATE_APPLICANTS
 } from './actions';
 
 
@@ -13,8 +21,11 @@ const initialState = {
     skills: [],
     currentSkill: '',
     currentJob: '',
-    users: [],
-    currentUser: ''
+    offers: [],
+    cart: [],
+    product: [],
+    user_jobs: [],
+    applicants: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -23,7 +34,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_JOBS:
             return {
                 ...state,
-                jobs: [...action.jobs],
+                jobs: [...action.jobs]
             };
 
         case UPDATE_CURRENT_JOB:
@@ -36,7 +47,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_SKILLS:
             return {
                 ...state,
-                skills: [...action.skills],
+                skills: [...action.skills]
             };
 
         case UPDATE_CURRENT_SKILL:
@@ -44,10 +55,10 @@ export const reducers = (state = initialState, action) => {
                 ...state,
                 currentSkill: action.currentSkill
             };
-        case UPDATE_USERS:
+        case UPDATE_OFFERS:
             return {
                 ...state,
-                users: [...action.users]
+                offers: [...action.offers]
             };
 
         case UPDATE_CURRENT_USER:
@@ -56,8 +67,66 @@ export const reducers = (state = initialState, action) => {
                 cuurentUser: action.currentUser
             };
 
+        case ADD_TO_CART:
+            return {
+                ...state,
+                cartOpen: true,
+                cart: [...state.cart, action.product]
+            };
 
+        case REMOVE_FROM_CART:
+            let newState = state.cart.filter(product => {
+                return product._id !== action._id;
+            });
 
+            return {
+                ...state,
+                cartOpen: newState.length > 0,
+                cart: newState
+            };
+
+        case UPDATE_CART_QUANTITY:
+            return {
+                ...state,
+                cartOpen: true,
+                cart: state.cart.map(product => {
+                    if (action._id === product._id) {
+                        product.purchaseQuantity = action.purchaseQuantity;
+                    }
+                    return product;
+                })
+            };
+
+        case CLEAR_CART:
+            return {
+                ...state,
+                cartOpen: false,
+                cart: []
+            };
+
+        case TOGGLE_CART:
+            return {
+                ...state,
+                cartOpen: !state.cartOpen
+            };
+
+        case UPDATE_PRODUCT:
+            return {
+                ...state,
+                product: [...action.product],
+            };
+
+        case UPDATE_USER_JOBS:
+            return {
+                ...state,
+                user_jobs: [...action.user_jobs],
+            };
+
+        case UPDATE_APPLICANTS:
+            return {
+                ...state,
+                applicants: [ ...action.applicants],
+            };
 
         // if it's none of these actions, do not update state at all and keep things the same!
         default:

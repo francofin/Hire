@@ -1,69 +1,127 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import SkillMenu from '../SkillMenu';
-import { UPDATE_JOBS, UPDATE_CURRENT_JOB } from '../../utils/actions';
+import { UPDATE_JOBS } from '../../utils/actions';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_JOBS_BY_SKILL, QUERY_ALL_JOBS } from "../../utils/queries";
+import { QUERY_JOBS_BY_SKILL} from "../../utils/queries";
 import { useDispatch, useSelector } from 'react-redux';
+import JobItem from "../JobItem";
+import spinner from '../../assets/spinner.gif';
+import { idbPromise } from "../../utils/helpers";
+import Header from '../Header';
+import homeimage from "../../assets/images/employeeproduct.jpg";
+import jobpost from "../../assets/images/8lPXfcs8i-python.jpg";
 
 
-const JobList = () => {
+
+function JobList()  {
 
   const dispatch = useDispatch();
   const state = useSelector(state => state);
 
-  const { jobs } = state;
+  const { currentSkill } = state;
+  console.log(currentSkill);
 
-  const { loading, data: jobListings } = useQuery(QUERY_ALL_JOBS);
-  
+  const { loading, data} = useQuery(QUERY_JOBS_BY_SKILL);
+
+  const [currentupload, setCurrentupload ] = useState({});
+
+
+  useEffect(() => {
+    if (data) {
+      setCurrentupload(data.jobs);
+    }
+  }, [ data, setCurrentupload ]);
+
+
 
   useEffect(() => {
 
-    if (jobListings) {
+    if (data) {
       dispatch({
         type: UPDATE_JOBS,
-        jobs: jobListings.jobs
-      })
-
+        jobs: data.jobs
+      });
+      data.jobs.forEach((job) => {
+        idbPromise('jobs', 'put', job);
+      });
+    }
+    else if (!loading) {
+      // since we're offline, get all of the data from the `products` store
+      idbPromise('jobs', 'get').then((jobs) => {
+        // use retrieved data to set global state for offline browsing
+        dispatch({
+          type: UPDATE_JOBS,
+          jobs: jobs
+        });
+      });
     }
 
-  }, [loading, jobListings, dispatch])
+  }, [ data, loading, dispatch]);
 
+  console.log(state);
+  console.log('joblist@62:',currentSkill);
+
+  console.log("skillzz", currentupload)
+  function filterJobs() {
+    if (!currentSkill) {
+      return currentupload;
+    }
+
+    return currentupload.filter(job => job.skills._id === currentSkill);
+  }
+
+  const imageDisplayed = homeimage;
+  const roleDisplayed = "H!red";
+
+  // let imageforjob;
+  // if(currentupload[0]) {
+  //   console.log("state jobs", require(`../../assets/images/${currentupload[0].upload.path.split("/")[5]}`));
+  //    imageforjob = require(`../../assets/images/${currentupload[0].upload.path.split("/")[5]}`).default;
+  // }
+
+ 
+  
 
   return (
-
-    <div id="portfolio" className="paddsection">
-
+    <section style={{margin:0}}>
+      <Header image={imageDisplayed} role={roleDisplayed}></Header>
+      <div id="portfolio" className="paddsection">
       <div className="container">
         <div className="section-title text-center">
-          <h2>My Portfolio</h2>
+          <h2>Browse Jobs</h2>
         </div>
       </div>
 
+      {currentupload.length ? (
       <div className="container">
         <div className="row">
           <div className="col-lg-12 d-flex justify-content-center">
             <SkillMenu />
           </div>
         </div>
-
-
         <div className="row portfolio-container">
-          {jobs.map(item => (
-            <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-              <img src={item.image} className="img-fluid" alt="" />
-              <div className="portfolio-info">
-                <h4>{item.skills.name}</h4>
-                <p>App</p>
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gall="portfolioGallery" className="venobox preview-link" title="App 1"><i className="bx bx-plus"></i></a>
-                <a href="portfolio-details.html" className="details-link" title="More Details"><i className="bx bx-link"></i></a>
-              </div>
+            {filterJobs().map(job => (
+              <JobItem
+              key = {job._id}
+              _id = {job._id}
+              image= {job.image}
+              upload = {jobpost}
+              role = {job.role}
+              skills = {job.skills}
+              />
+            ))}  
             </div>
-
-          ))}
-
-        </div>
-      </div>
+            </div>
+      ) : (
+        <h3>You haven't added any jobs yet!</h3>
+      )}
+       { loading ? 
+      <img src={spinner} alt="loading" />: null}
+       
+      
     </div>
+    </section>
+    
   );
 };
 

@@ -89,16 +89,17 @@ db.once('open', async () => {
         return number
     }
 
-    for (let i = 0; i < 102; i += 1) {
+    for (let i = 0; i < 40; i += 1) {
         const description = faker.lorem.paragraphs();
         const image = `${faker.image.business()}?random=${Date.now()}`
         const skills = skillSet[randomNumber()]._id;
         const positionFilled = faker.random.boolean();
+        const role = faker.name.jobTitle();
 
         const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
         const { email, _id: userId } = createdUsers.ops[randomUserIndex];
 
-        const createdJob = await Jobs.create({email, description, image, skills, positionFilled });
+        const createdJob = await Jobs.create({email, description, image, skills, positionFilled, role });
 
         const updatedUser = await User.updateOne(
             { _id: userId },

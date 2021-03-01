@@ -39,6 +39,10 @@ const userSchema = new Schema({
   image: {
     type: String
   },
+  upload: {
+    type: Schema.Types.ObjectId,
+    ref: "Image"
+  },
   orders: [Order.schema],
   jobOffers: [
     {
@@ -64,13 +68,17 @@ const userSchema = new Schema({
       ref: "Jobs",
     },
   ],
-  skills: [
+  skills: 
     {
       type: Schema.Types.ObjectId,
       ref: "Skills",
       required: true,
     },
-  ],
+},
+{
+  toJSON: {
+    virtuals: true
+  }
 });
 
 // set up pre-save middleware to create password
@@ -104,6 +112,6 @@ userSchema.virtual("skillCount").get(function () {
   return this.skills.length;
 });
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;

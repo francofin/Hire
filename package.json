@@ -9,6 +9,7 @@
     "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build",
     "heroku-postbuild": "cd client && npm run build"
   },
   "repository": {
@@ -25,6 +26,7 @@
     "concurrently": "^5.3.0"
   },
   "dependencies": {
+<<<<<<< HEAD
     "apollo-server": "^2.21.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -37,5 +39,9 @@
     "nodemon": "^2.0.7",
     "react": "^16.13.1",
     "yarn": "^1.22.10"
+=======
+    "if-env": "^1.0.4",
+    "react-div-100vh": "^0.5.6"
+>>>>>>> dc6b48d8ef607953dc5edcf83a77ece7424746bf
   }
 }

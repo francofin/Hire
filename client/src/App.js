@@ -1,10 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-client";
+import ApolloClient from "apollo-boost-upload";
 import {createUploadLink} from 'apollo-upload-client';
 import { InMemoryCache} from 'apollo-cache-inmemory';
-
 // import { StoreProvider } from "./utils/GlobalState";
 import { Provider } from "react-redux";
 import Footer from "./components/Footer";
@@ -15,14 +14,17 @@ import Profile from "./pages/Profile";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import Header from "./components/Header";
+import About from "./pages/About";
+
+import JobDetail from "./pages/JobDetail";
+import AddJob from "./pages/AddJob";
 import store from "./utils/store";
 const httpLink = createUploadLink({
-  uri: "http://localhost:3001/graphql",
+  uri: "graphql",
 });
 
 const client = new ApolloClient({
-  request: (operation) => {
+  request: operation => {
     const token = localStorage.getItem("id_token");
     operation.setContext({
       headers: {
@@ -30,7 +32,7 @@ const client = new ApolloClient({
       },
     });
   },
-  cache: new InMemoryCache,
+  cache: new InMemoryCache(),
   link: httpLink,
   // uri: "/graphql",
 });
@@ -42,17 +44,17 @@ function App() {
         <div>
           <Provider store={store}>
             <Nav />
-            <Header />
-            <main id="main">
               <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
-                <Route exact path="/Profile" component={Profile} />
+                <Route exact path="/about" component={About} />
+                <Route exact path="/profile/:id?" component={Profile} />
+                <Route exact path="/addjob" component={AddJob} />
+                <Route exact path="/jobs/:id" component={JobDetail} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />
               </Switch>
-            </main>
             <Footer />
           </Provider>
         </div>

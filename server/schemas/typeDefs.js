@@ -3,7 +3,7 @@ const {gql} = require('apollo-server-express');
 const typeDefs = gql`
     type Skills {
         _id: ID
-        name: String
+        name: String!
     }
 
     type Image {
@@ -21,37 +21,18 @@ const typeDefs = gql`
         image: String
         positionFilled: Boolean
         skills: Skills
+        upload: Image
+        role: String
         userInterestCount: Int
-        candidateCount: Int
         matchCount: Int
         applicants: [User]
+        applicantCount: Int
         candidates: [User]
+        candidateCount: Int
         matchedCandidates: [User]
         
     }
 
-    type User {
-        _id: ID
-        firstName: String
-        lastName: String
-        email: String
-        password: String
-        profileText: String
-        image: String
-        applied: [Jobs]
-        jobOffers: [Jobs]
-        matchedJobs:[Jobs]
-        skills: [Skills]
-        jobs: [Jobs]
-        jobCount: Int
-        offerCount: Int
-        matchedJobCount: Int
-        applicantCount: Int
-        skillCount: Int
-        orders: Order
-    }
-
-    
     type Order {
         _id: ID
         purchaseDate: String
@@ -63,46 +44,67 @@ const typeDefs = gql`
         name: String
         description: String
         price: Float
+        quantity: Int
     }
 
-    type AuthUser {
-        token: ID!
-        user: User
+    type User {
+        _id: ID
+        firstName: String
+        lastName: String
+        email: String
+        password: String
+        profileText: String
+        image: String
+        upload: Image
+        applied: [Jobs]
+        jobOffers: [Jobs]
+        matchedJobs:[Jobs]
+        skills: Skills
+        jobs: [Jobs]
+        jobCount: Int
+        offerCount: Int
+        matchedJobCount: Int
+        skillCount: Int
+        orders: Order
     }
 
     type Checkout {
         session: ID
       }
 
+
+    type Auth {
+        token: ID!
+        user: User
+    }
+
+
     type Query {
         me: User
         users: [User]
-        user(email: String!): User
-        job(_id: ID): [Jobs]
-        jobs(skills: ID): [Jobs]
+        user(_id: ID!): User
+        job(_id: ID): Jobs
+        jobs(skills: ID, role:String): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         images: [Image]
-        product(_id: ID!): Product
+        product(_id: ID): Product
         skills: [Skills]
         skill(_id:ID): Skills
-        uploads: [Image]
+        uploads(_id: ID): [Image]
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID!], image:String): AuthUser
-        updateUser(firstName: String, lastName: String, email: String, password: String, image:String): User
-        login(email: String!, password: String!): AuthUser
-        addJob(email: String!, description: String!, image:String, skills:[ID!]): Jobs
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], upload:ID): Auth
+        updateUser(firstName: String, lastName: String, email: String, password: String, profileText: String, upload:ID): User
+        login(email: String!, password: String!): Auth
+        addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
-        showJobInterest(jobId:ID!): Jobs
-        showUserInterest(userId:ID!): User
+        showJobInterest(_id:ID!): Jobs
+        showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
         uploadFile(file: Upload!): Image!
     }
-
-
-
 `;
 
 

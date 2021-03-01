@@ -1,22 +1,39 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/react-hooks";
 import { ADD_USER, UPLOAD_MUTATION } from "../utils/mutations";
-import { UPDATE_SKILLS, UPDATE_CURRENT_SKILL } from "../utils/actions";
+import { UPDATE_SKILLS, UPDATE_IMAGE } from "../utils/actions";
 import { useQuery } from "@apollo/react-hooks";
-import { QUERY_SKILLS } from "../utils/queries";
+import { QUERY_SKILLS, QUERY_IMAGE } from "../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
 import { useDropzone } from 'react-dropzone';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { Link } from "react-router-dom";
+import Header from '../components/Header';
 import Auth from "../utils/auth";
+import homeimage from "../assets/images/employeeproduct.jpg";
+
 
 function Signup(props) {
   const dispatch = useDispatch();
   const state = useSelector((state) => state);
 
+
   const [formState, setFormState] = useState({ email: '', password: '', firstName: '', lastName: '', profileText:'' });
   const [addUser] = useMutation(ADD_USER);
   const [file, setFile] = useState({});
-  const [uploadFile] = useMutation(UPLOAD_MUTATION);
+
+  
+  const [uploadFile, {data: mutationData}] = useMutation(UPLOAD_MUTATION, {
+    refetchQueries: [{query: QUERY_IMAGE}]
+  });
+
+  // const {  data:imageData } = useQuery(QUERY_IMAGE);
+  // console.log("images uploaded", imageData);
+
+  if(mutationData){
+    console.log(mutationData.uploadFile.id);
+  };
+  
 
   const handleUpload = async (event) => {
     event.preventDefault();
@@ -25,11 +42,15 @@ function Signup(props) {
       uploadFile({
         variables:  {file }
       });
+
+
       setFile({})
     };
-    console.log("uploaded file", file)
+  
     return file;
   };
+  
+
 
   const {getRootProps, getInputProps} = useDropzone({
     accept: 'image/*',
@@ -56,6 +77,7 @@ function Signup(props) {
 
 
 
+
   const { skills } = state;
 
   const { loading, data: skillData } = useQuery(QUERY_SKILLS);
@@ -69,13 +91,13 @@ function Signup(props) {
         skills: skillData.skills,
       });
       //   skillData.skills.forEach(skill => {
-      //     idbPromise('categories', 'put', skill);
+      //     idbPromise('skills', 'put', skill);
       //   });
     }
     // else if (!loading) {
-    //   idbPromise('categories', 'get').then(categories => {
+    //   idbPromise('skills', 'get').then(categories => {
     //     dispatch({
-    //       type: UPDATE_CATEGORIES,
+    //       type: UPDATE_SKILLS,
     //       categories: categories
     //     });
     //   });
@@ -84,15 +106,16 @@ function Signup(props) {
 
 
 
+
+
   const handleFormSubmit = async event => {
     event.preventDefault();
-    const image = handleUpload();
-    
+
     const mutationResponse = await addUser({
       variables: {
         email: formState.email, password: formState.password,
         firstName: formState.firstName, lastName: formState.lastName, 
-        profileText: formState.profileText, skills: formState.skills
+        profileText: formState.profileText, skills: formState.skills, upload: mutationData.uploadFile.id
       }
     });
     const token = mutationResponse.data.addUser.token;
@@ -107,10 +130,15 @@ function Signup(props) {
     });
   };
 
+  const imageDisplayed = homeimage;
+  const roleDisplayed = "H!red";
+
   return (
+    <section style={{margin:0}}>
+      <Header image={imageDisplayed} role={roleDisplayed}></Header>
     <div id="contact" className="paddsection">
       <div className="container">
-        <div class="contact-block1">
+        <div className="contact-block1">
           <div className="row">
             <div className="col-lg-6">
               <div className="contact-contact">
@@ -134,7 +162,7 @@ function Signup(props) {
             </div>
 
             <div className="col-lg-6">
-              <form onSubmit={handleFormSubmit} className="php-email-form" enctype="multipart/form-data">
+              <form onSubmit={handleFormSubmit} className="php-email-form" encType="multipart/form-data">
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="form-group contact-block1">
@@ -228,14 +256,11 @@ function Signup(props) {
 
                   <div className="col-lg-12" style={{ paddingBottom: 20 }}>
                     {skills.map((skill) => (
-                      <div className="form-check contact-block1">
+                      <div key={skill._id} className="form-check">
                         <input
-                          key={skill._id}
                           type="checkbox"
                           name="skills"
                           className="form-check-input"
-                          id="firstName"
-                          placeholder="First Name"
                           value={skill._id}
                           onChange={handleChange}
                         />
@@ -244,17 +269,17 @@ function Signup(props) {
                     ))}
                   </div>
 
-                  <div class="col-lg-12">
-                    <div class="form-group">
+                  <div className="col-lg-12">
+                    <div className="form-group">
                       <textarea
-                        class="form-control"
+                        className="form-control"
                         name="profileText"
                         rows="20"
                         id="profileText"
                         placeholder="Please tell us about yourself and your job experience. Include as much detail as you can."
                         onChange={handleChange}
                       ></textarea>
-                      <div class="validate"></div>
+                      <div className="validate"></div>
                     </div>
                   </div>
 
@@ -272,6 +297,7 @@ function Signup(props) {
         </div>
       </div>
     </div>
+    </section>
   );
 }
 

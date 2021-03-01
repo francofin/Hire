@@ -1,22 +1,26 @@
-import React, { useState } from "react";
-// import homeimage from "../../assets/images/employeeproduct.jpg";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
-const Header = () => {
+
+
+const Header = (prop) => {
+  const {image, upload, role, firstName, lastName, _id, email, skill} = prop;
+
   return (
-    <div id="hero" className="home">
+    <div id="hero" className="home" style={{backgroundImage: `url(${image})`}}>
 
     <div className="container">
       <div className="hero-content">
-        <h1>I'm <span className="typed"></span></h1>
-        <p className="typed-items" data-typed-person="Alex Smith">Designer, Developer, Freelancer, Photographer</p>
+        <h1> {firstName} {lastName}<span span className="typed"></span></h1>
+        <p className="typed-items" data-typed-person={role}></p>
 
         <ul className="list-unstyled list-social">
-          <li><a href="#"><i className="ion-social-facebook"></i></a></li>
-          <li><a href="#"><i className="ion-social-twitter"></i></a></li>
-          <li><a href="#"><i className="ion-social-instagram"></i></a></li>
-          <li><a href="#"><i className="ion-social-googleplus"></i></a></li>
-          <li><a href="#"><i className="ion-social-tumblr"></i></a></li>
-          <li><a href="#"><i className="ion-social-dribbble"></i></a></li>
+          <li><Link to="/"><i className="ion-social-facebook"></i></Link></li>
+          <li><Link to="/"><i className="ion-social-twitter"></i></Link></li>
+          <li><Link to="/"><i className="ion-social-instagram"></i></Link></li>
+          <li><Link to="/"><i className="ion-social-googleplus"></i></Link></li>
+          <li><Link to="/"><i className="ion-social-tumblr"></i></Link></li>
+          <li><Link to="/"><i className="ion-social-dribbble"></i></Link></li>
         </ul>
       </div>
     </div>

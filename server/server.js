@@ -1,11 +1,12 @@
 const express = require('express');
-const db = require('./config/connection');
-const {apolloUploadExpress} = require('apollo-upload-server');
-const {resolvers, typeDefs} = require('./schemas');
-const cors = require('cors');
-const {authMiddleWare} = require('./utils/auth');
-
 const {ApolloServer} = require('apollo-server-express');
+
+const {resolvers, typeDefs} = require('./schemas');
+const db = require('./config/connection');
+const cors = require('cors');
+const { authMiddleware } = require('./utils/auth');
+
+
 
 
 const path = require('path');
@@ -17,7 +18,7 @@ const app = express();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: authMiddleWare
+    context: authMiddleware
 });
 //new server data 
 server.applyMiddleware({app});
@@ -25,7 +26,7 @@ server.applyMiddleware({app});
 app.use(express.urlencoded({extended: false}));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, './images')));
 app.use(cors('*'));
 
 // Serve up static assets

@@ -1,5 +1,5 @@
 fix multiple skill upload
-fix image upload to link with user profile
 clean up code base
-show profile page for user and job 
 show interest functionality
+add posted by field to job listings
+

@@ -1,15 +1,13 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Skills, Order, Jobs, Image } = require('../models');
 const { signToken } = require('../utils/auth');
-const uploadFile = require('../utils/upload');
-const {createWriteStream, mkdir, createReadStream} = require('fs');
-const fs = require('fs');
+const {createWriteStream, mkdir} = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
 const shortid = require('shortid');
 
 const storeUpload = async ({stream, filename, mimetype}  ) => {
   const id = shortid.generate();
-  const path = `images/${id}-${filename}`;
+  const path = `../client/src/assets/images/${id}-${filename}`;
 
   return new Promise((resolve, reject) =>{
     stream
@@ -31,14 +29,17 @@ const processUpload = async (upload) => {
 
 const resolvers = {
   Query: {
-    skills: async () => {
+    skills: async (parent, {}) => {
       return await Skills.find();
     },
     skill: async (parent, { _id }) => {
-      return await Skills.findOne({ _id })
+      return await Skills.findOne(_id);
     },
     images: async () => {
       return await Image.find();
+    },
+    uploads: async (parent, { _id }) => {
+      return await Image.findOne(_id);
     },
     product: async (parent, { name }) => {
       const params = {};
@@ -51,11 +52,17 @@ const resolvers = {
       return await Product.find(params);
     },
 
-    jobs: async (parent, { skills }) => {
+    jobs: async (parent, { skills, role }) => {
       const params = {};
 
       if (skills) {
         params.skills = skills;
+      }
+
+      if (role) {
+        params.role = {
+          $regex: role
+        };
       }
 
       return await Jobs.find(params).sort({ createdAt: -1 })
@@ -63,6 +70,7 @@ const resolvers = {
         .populate('applicants')
         .populate('candidates')
         .populate('matchedCandidates')
+        .populate('upload');
         
     },
 
@@ -70,23 +78,9 @@ const resolvers = {
       return await Jobs.findOne({ _id })
         .populate('skills')
         .populate('applicants')
+        .populate('upload')
         .populate('candidates')
-        .populate('matchedCandidates')
-    },
-
-    users: async () => {
-      return User.find()
-        .select('-__v')
-        .populate('jobOffers')
-        .populate('applied')
-        .populate('matchedJobs')
-    },
-    user: async (parent, { email }) => {
-      return User.findOne({ email })
-        .select('-__v')
-        .populate('jobOffers')
-        .populate('applied')
-        .populate('matchedJobs')
+        .populate('matchedCandidates');
     },
     me: async (parent, args, context) => {
       if (context.user) {
@@ -97,8 +91,8 @@ const resolvers = {
           .populate('jobOffers')
           .populate('applied')
           .populate('matchedJobs')
-          .populate('image')
-          .populate('orders')
+          .populate('upload')
+          .populate('orders');
 
         console.log('context', context.user);
         console.log('UserData', userData);
@@ -106,6 +100,24 @@ const resolvers = {
       }
 
       throw new AuthenticationError('Not logged in');
+    },
+    users: async () => {
+      return User.find()
+        .select('-__v')
+        .populate('jobOffers')
+        .populate('applied')
+        .populate('matchedJobs')
+        .populate('skills')
+        .populate('upload');
+    },
+    user: async (parent, { _id }) => {
+      return User.findOne({ _id })
+        .select('-__v')
+        .populate('matchedJobs')
+        .populate('skills')
+        .populate('jobs')
+        .populate('jobOffers')
+        .populate('upload');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -127,7 +139,7 @@ const resolvers = {
       const productItem = await stripe.products.create({
         name: product.name,
         description: product.description,
-        images: [`${url}/images/${product.image}`]
+        // images: [`${url}/images/${product.image}`]
       });
 
       // generate price id using the product id
@@ -167,16 +179,25 @@ const resolvers = {
       const upload = await processUpload(file);
       // console.log(upload);
       const uploadedFile = await Image.create(upload);
-      console.log(uploadedFile);
+      console.log("uploaded file", uploadedFile);
       return uploadedFile;
     },
     addUser: async (parent, args) => {
-  
+
         // console.log(args);
-        const user = await User.create(args);
+        const user = await User.create({
+          firstName: args.firstName,
+          lastName: args.lastName,
+          email: args.email,
+          password: args.password,
+          profileText: args.profileText,
+          skills: args.skills,
+          upload: args.upload
+        });
         const token = signToken(user);
 
-        // console.log(user);
+        console.log(args);
+        console.log(user);
 
       return { token, user };
     },
@@ -188,8 +209,9 @@ const resolvers = {
       );
     },
     login: async (parent, { email, password }) => {
-      const user = await User.findOne({ email });
 
+      
+      const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError('Incorrect credentials');
       }
@@ -201,12 +223,22 @@ const resolvers = {
       }
 
       const token = signToken(user);
+      console.log("after login", user);
+      console.log(token);
 
       return { token, user };
     },
     addJob: async (parent, args, context) => {
       if (context.user) {
-        const job = await Jobs.create({ ...args, email: context.user.email });
+        const job = await Jobs.create({
+          email: args.email,
+          description: args.description,
+          role: args.role,
+          skills: args.skills,
+          upload: args.upload
+        });
+
+        console.log(job);
 
         await User.findByIdAndUpdate(
           { _id: context.user._id },
@@ -216,6 +248,7 @@ const resolvers = {
 
         return job;
       }
+      throw new AuthenticationError('You need to be logged in!');
     },
     updateJob: async (parent, args, context) => {
       if (context.user) {
@@ -228,26 +261,42 @@ const resolvers = {
         return job;
       }
     },
-    showJobInterest: async (parent, { jobId }, context) => {
+    showJobInterest: async (parent,  id , context) => {
       if (context.user) {
         const updatedJob = await Jobs.findOneAndUpdate(
-          { _id: jobId },
+          { _id: id },
           { $addToSet: { applicants: context.user._id } },
           { new: true }
         );
+
+        await User.findOneAndUpdate(
+          {_id: context.user._id},
+          {$push : {applied: updatedJob._id}},
+          { new: true }
+        );
+
         return updatedJob;
       
 
       throw new AuthenticationError('You need to be logged in!');
     },
-    showUserInterest: async (parent, { userId }, context) => {
+    showUserInterest: async (parent,  {userId, jobId}, context) => {
       if (context.user) {
-        const userPost = await User.findOne({ email: context.user.email })
+        
         const updatedUser = await User.findOneAndUpdate(
-          { _id: userId },
+          { _id: userId},
           { $addToSet: { jobOffers: jobId } },
           { new: true }
         );
+
+        const updateJob = await Jobs.findOneAndUpdate(
+          { _id: jobId },
+          { $addToSet: { candidates: userId } },
+          { new: true }
+        );
+
+        console.log("Our Updated User", updatedUser);
+
         return updatedUser;
       }
 

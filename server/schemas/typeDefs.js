@@ -101,7 +101,7 @@ const typeDefs = gql`
         addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(_id:ID!): Jobs
-        showUserInterest(userId:ID!): User
+        showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
         uploadFile(file: Upload!): Image!
     }

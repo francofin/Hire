@@ -41,6 +41,10 @@ query user($id:ID!) {
     firstName
     lastName
     profileText
+    upload{
+      id
+      path
+    }
     image 
     jobs {
       role
@@ -139,6 +143,16 @@ export const QUERY_JOBS_BY_SKILL = gql`
       skills {
         _id
         name
+      }
+      candidates {
+        firstName
+        _id
+      }
+      applicants {
+        firstName
+        lastName
+        image
+        _id
       }
     }
   }

@@ -115,6 +115,8 @@ const resolvers = {
         .select('-__v')
         .populate('matchedJobs')
         .populate('skills')
+        .populate('jobs')
+        .populate('jobOffers')
         .populate('upload');
     },
     order: async (parent, { _id }, context) => {
@@ -278,14 +280,23 @@ const resolvers = {
 
       throw new AuthenticationError('You need to be logged in!');
     },
-    showUserInterest: async (parent, { userId }, context) => {
+    showUserInterest: async (parent,  {userId, jobId}, context) => {
       if (context.user) {
-        const userPost = await User.findOne({ email: context.user.email })
+        
         const updatedUser = await User.findOneAndUpdate(
-          { _id: userId },
+          { _id: userId},
           { $addToSet: { jobOffers: jobId } },
           { new: true }
         );
+
+        const updateJob = await Jobs.findOneAndUpdate(
+          { _id: jobId },
+          { $addToSet: { candidates: userId } },
+          { new: true }
+        );
+
+        console.log("Our Updated User", updatedUser);
+
         return updatedUser;
       }
 

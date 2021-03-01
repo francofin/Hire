@@ -11,7 +11,8 @@ import {
     REMOVE_FROM_CART,
     UPDATE_PRODUCT,
     UPDATE_CART_QUANTITY,
-    UPDATE_USER_JOBS
+    UPDATE_USER_JOBS,
+    UPDATE_APPLICANTS
 } from './actions';
 
 
@@ -23,7 +24,8 @@ const initialState = {
     offers: [],
     cart: [],
     product: [],
-    user_jobs: []
+    user_jobs: [],
+    applicants: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -120,8 +122,11 @@ export const reducers = (state = initialState, action) => {
                 user_jobs: [...action.user_jobs],
             };
 
-
-
+        case UPDATE_APPLICANTS:
+            return {
+                ...state,
+                applicants: [ ...action.applicants],
+            };
 
         // if it's none of these actions, do not update state at all and keep things the same!
         default:

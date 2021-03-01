@@ -43,12 +43,15 @@ const Profile = () => {
   
 
 
-
+  console.log("navigatedprofile", user.upload===null)
 
   useEffect(() => {
-    if (userData) {
+    if (user.upload) {
       setCurrentupload(require(`../assets/images/${userData.me.upload.path.split("/")[5]}`))
       console.log("meconsol", userData.me.upload.path.split("/"));
+    }
+    else{
+      setCurrentupload(user.image);
     }
   }, [userData, setCurrentupload]);
 
@@ -116,12 +119,22 @@ const Profile = () => {
   //     // if product isn't in the cart yet, add it to the current shopping cart in IndexedDB
   //     idbPromise('cart', 'put', { ...currentProduct });
   //   }
-  // }
-  console.log("the currentest upload", currentupload.default);
-  // const imageforspot =  import(`../assets/images/${currentupload[5]}`).then((image) => console.log(image));
-  // console.log( imageforspot);
 
-console.log(user_jobs);
+let imageRendered
+try {
+  if(currentupload.default) {
+    imageRendered = currentupload.default
+  }
+  else{
+    imageRendered = currentupload;
+  }
+}
+catch(e) {
+  console.log(e)
+}
+  
+  console.log("rnedered", user);
+  console.log("rnedered", currentupload);
 
 
   return (
@@ -129,7 +142,7 @@ console.log(user_jobs);
     <section style={{ margin: 0 }}>
 
       <Header
-        image={currentupload.default}
+       image={imageRendered}
         firstName={user.firstName}
         lastName={user.lastName}
         role=''
@@ -166,7 +179,24 @@ console.log(user_jobs);
                     </ul>
                   </div>
                 </div>
-                <div className="col-md-9">
+                <div className="col-md-4">
+                  <div className="portfolio-info">
+                    <h3>Current Job Offers</h3>
+                    <ul>
+                      {/* {offers.map(offer => ( */}
+                      {/* <li>{offer.role}: {offer.skill}</li> */}
+                      {/* ))} */}
+                      {/* <button onClick={addToCart}>Purchase Premium</button>
+                  <button
+                    disabled={!cart.find(p => p._id === currentProduct._id)}
+                    onClick={removeFromCart}
+                  >
+                    Remove from Cart
+            </button> */}
+                    </ul>
+                  </div>
+                </div>
+                <div className="col-md-11">
                   <div className="portfolio-info">
                     <h3>Current Job Offers</h3>
                     <ul>

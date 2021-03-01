@@ -63,6 +63,7 @@ const JobDetail = () => {
         id: currentJob._id
       }
     });
+    window.location.assign('/');
 
   }
 

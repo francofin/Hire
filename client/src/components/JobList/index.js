@@ -59,6 +59,7 @@ function JobList()  {
   }, [ data, loading, dispatch]);
 
   console.log(state);
+  console.log('joblist@62:',currentSkill);
 
 
   function filterJobs() {
@@ -66,7 +67,7 @@ function JobList()  {
       return currentupload;
     }
 
-    return currentupload.jobs.filter(job => job.skills._id === currentSkill);
+    return currentupload.filter(job => job.skills._id === currentSkill);
   }
 
   const imageDisplayed = homeimage;

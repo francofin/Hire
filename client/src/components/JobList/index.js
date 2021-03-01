@@ -60,13 +60,13 @@ function JobList()  {
 
   console.log(state);
 
-
+  console.log("skillzz", currentupload)
   function filterJobs() {
     if (!currentSkill) {
       return currentupload;
     }
 
-    return currentupload.jobs.filter(job => job.skills._id === currentSkill);
+    return currentupload.filter(job => job.skills._id === currentSkill);
   }
 
   const imageDisplayed = homeimage;

@@ -64,6 +64,8 @@ const JobDetail = () => {
       }
     });
 
+    window.location.assign('/')
+
   }
 
   console.log("all aplicants", currentJob.applicants);

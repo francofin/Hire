@@ -61,7 +61,7 @@ function JobList()  {
   console.log(state);
   console.log('joblist@62:',currentSkill);
 
-
+  console.log("skillzz", currentupload)
   function filterJobs() {
     if (!currentSkill) {
       return currentupload;

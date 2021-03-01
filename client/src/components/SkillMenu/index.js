@@ -47,6 +47,7 @@ function SkillMenu() {
             <li className="filter-active"></li>
             {skills.map(item => (
                 <li key={item._id}
+
                     onClick={() => {
                     handleClick(item._id);
                     }}

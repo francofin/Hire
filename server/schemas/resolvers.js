@@ -1,9 +1,7 @@
 const { AuthenticationError } = require('apollo-server-express');
 const { User, Product, Skills, Order, Jobs, Image } = require('../models');
 const { signToken } = require('../utils/auth');
-const uploadFile = require('../utils/upload');
-const {createWriteStream, mkdir, createReadStream} = require('fs');
-const fs = require('fs');
+const {createWriteStream, mkdir} = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
 const shortid = require('shortid');
 
@@ -72,6 +70,7 @@ const resolvers = {
         .populate('applicants')
         .populate('candidates')
         .populate('matchedCandidates')
+        .populate('upload');
         
     },
 
@@ -79,8 +78,9 @@ const resolvers = {
       return await Jobs.findOne({ _id })
         .populate('skills')
         .populate('applicants')
+        .populate('upload')
         .populate('candidates')
-        .populate('matchedCandidates')
+        .populate('matchedCandidates');
     },
     me: async (parent, args, context) => {
       if (context.user) {
@@ -239,6 +239,8 @@ const resolvers = {
           upload: args.upload
         });
 
+        console.log(job);
+
         await User.findByIdAndUpdate(
           { _id: context.user._id },
           { $push: { jobs: job._id } },
@@ -247,6 +249,7 @@ const resolvers = {
 
         return job;
       }
+      throw new AuthenticationError('You need to be logged in!');
     },
     updateJob: async (parent, args, context) => {
       if (context.user) {

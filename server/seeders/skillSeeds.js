@@ -89,7 +89,7 @@ db.once('open', async () => {
         return number
     }
 
-    for (let i = 0; i < 27; i += 1) {
+    for (let i = 0; i < 40; i += 1) {
         const description = faker.lorem.paragraphs();
         const image = `${faker.image.business()}?random=${Date.now()}`
         const skills = skillSet[randomNumber()]._id;

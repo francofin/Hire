@@ -11,7 +11,7 @@ import {
     REMOVE_FROM_CART,
     UPDATE_PRODUCT,
     UPDATE_CART_QUANTITY,
-    UPDATE_IMAGE
+    UPDATE_USER_JOBS
 } from './actions';
 
 
@@ -23,7 +23,7 @@ const initialState = {
     offers: [],
     cart: [],
     product: [],
-    upload: []
+    user_jobs: []
 };
 
 export const reducers = (state = initialState, action) => {
@@ -114,10 +114,10 @@ export const reducers = (state = initialState, action) => {
                 product: [...action.product],
             };
 
-        case UPDATE_IMAGE:
+        case UPDATE_USER_JOBS:
             return {
                 ...state,
-                upload: action.upload
+                user_jobs: [...action.user_jobs],
             };
 
 

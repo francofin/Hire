@@ -1,9 +1,17 @@
 import React from "react";
+import homeimage from "../assets/images/employeeproduct.jpg";
+import Header from '../components/Header';
+import ContactForm from '../components/Contact';
 
 
 const About = () => {
 
+  const imageDisplayed = homeimage;
+  const roleDisplayed = "H!red";
+
     return (
+      <section style={{margin:0}}>
+      <Header image={imageDisplayed} role={roleDisplayed}></Header>
         <div className="main-content paddsection">
         <div className="container">
           <div className="row justify-content-center">
@@ -12,17 +20,9 @@ const About = () => {
                 <div className="container-main single-main">
                   <div className="col-md-12">
                     <div className="block-main mb-30">
-                      <img src="assets/img/blog-post-big.jpg" className="img-responsive" alt="reviews2" />
                       <div className="content-main single-post padDiv">
                         <div className="journal-txt">
                           <h4><a href="#">SO LETS MAKE THE MOST IS BEAUTIFUL</a></h4>
-                        </div>
-                        <div className="post-meta">
-                          <ul className="list-unstyled mb-0">
-                            <li className="author">by:<a href="#">medsign</a></li>
-                            <li className="date">date:<a href="#">March 31, 2017</a></li>
-                            <li className="commont"><i className="ion-ios-heart-outline"></i><a href="#">3 Comments</a></li>
-                          </ul>
                         </div>
                         <p className="mb-30">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to
                           using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web
@@ -38,41 +38,9 @@ const About = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-12">
-                    <div className="comments text-left padDiv mb-30">
-                      <div className="entry-comments">
-                      </div>
-                    </div>
-                  </div>
                   <div className="col-lg-12">
                     <div className="cmt padDiv">
-                      <form id="comment-form" method="post" action="" role="form">
-                        <div className="row">
-                          <div className="col-lg-6">
-                            <div className="form-group">
-                              <input id="form_name" type="text" name="name" className="form-control" placeholder="Name *" required="required" />
-                            </div>
-                          </div>
-                          <div className="col-lg-6">
-                            <div className="form-group">
-                              <input id="form_email" type="email" name="email" className="form-control" placeholder="email *" required="required" />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="form-group">
-                              <input id="form_name" type="text" name="website" className="form-control" placeholder="Website" />
-                            </div>
-                          </div>
-                          <div className="col-lg-12">
-                            <div className="form-group">
-                              <textarea id="form_message" name="message" className="form-control" placeholder="Message *" style={{Height: 200}} required="required"></textarea>
-                            </div>
-                          </div>
-                          <div className="col-lg-12">
-                            <input type="submit" className="btn btn-defeault btn-send" value="Send message" />
-                          </div>
-                        </div>
-                      </form>
+                      <ContactForm></ContactForm>
                     </div>
                   </div>
                 </div>
@@ -81,6 +49,7 @@ const About = () => {
           </div>
         </div>
       </div>
+      </section>
     );
   };
   

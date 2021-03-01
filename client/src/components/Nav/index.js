@@ -23,7 +23,7 @@ function Nav() {
                             <li><Link to="/about" className="smoothScroll">About</Link></li>
                             <li><Link to="/profile" className="smoothScroll">{Auth.getProfile().data.firstName}'s Profile</Link></li>
                             <li><Link to="/" className="smoothScroll" onClick={() => Auth.logout()}>Logout</Link></li>
-                            <li><Link to="/" className="smoothScroll">Contact</Link></li>
+                            <li><Link to="/addjob" className="smoothScroll">Post Job</Link></li>
                         </ul>
                     </div>
                 </div>
@@ -44,7 +44,6 @@ function Nav() {
                             <li><Link to="/about" className="smoothScroll">About</Link></li>
                             <li><Link to="/signup" className="smoothScroll">Sign Up</Link></li>
                             <li><Link to="/login" className="smoothScroll">Login</Link></li>
-                            <li><Link to="/" className="smoothScroll">Contact</Link></li>
                         </ul>
                     </div>
                 </div>

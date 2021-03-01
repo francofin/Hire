@@ -15,8 +15,10 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import About from "./pages/About";
-import store from "./utils/store";
+
 import JobDetail from "./pages/JobDetail";
+import AddJob from "./pages/AddJob";
+import store from "./utils/store";
 const httpLink = createUploadLink({
   uri: "graphql",
 });
@@ -30,16 +32,7 @@ const client = new ApolloClient({
       },
     });
   },
-  cache: new InMemoryCache({
-    typePolicies: {
-      Skills: {
-        keyFields: []
-      },
-      Images: {
-        keyFields: ["id", "filename",]
-      }
-    }
-  }),
+  cache: new InMemoryCache(),
   link: httpLink,
   // uri: "/graphql",
 });
@@ -57,6 +50,7 @@ function App() {
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/about" component={About} />
                 <Route exact path="/profile/:id?" component={Profile} />
+                <Route exact path="/addjob" component={AddJob} />
                 <Route exact path="/jobs/:id" component={JobDetail} />
                 <Route exact path="/success" component={Success} />
                 <Route component={NoMatch} />

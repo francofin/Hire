@@ -9,18 +9,6 @@ export const QUERY_SKILLS = gql`
 }
 `;
 
-export const QUERY_ME = gql`
-{
-  me {
-    _id
-    email
-    firstName
-    lastName
-    profileText
-  }
-}
-`;
-
 export const QUERY_ME_BASIC = gql`
   {
     me {
@@ -37,6 +25,10 @@ export const QUERY_ME_BASIC = gql`
         _id
         name
       }
+      jobs {
+        role
+        _id
+      }
     }
   }
 `;
@@ -50,6 +42,10 @@ query user($id:ID!) {
     lastName
     profileText
     image 
+    jobs {
+      role
+      _id
+    }
     skills {
       _id
       name
@@ -72,7 +68,6 @@ query user($id:ID!) {
       description
       positionFilled
       image
-
       createdAt
     }
   }
@@ -135,6 +130,11 @@ export const QUERY_JOBS_BY_SKILL = gql`
       role
       description
       image
+      upload {
+        id
+        path
+        filename
+      }
       createdAt
       skills {
         _id

@@ -26,6 +26,15 @@ export const ADD_USER = gql`
   }
 `;
 
+export const ADD_JOB = gql`
+  mutation addJob($email: String!, $description:String!, $role:String!, $skills: [ID], $upload:ID) {
+    addJob(email: $email, description: $description, role: $role, skills: $skills, upload:$upload) {
+      email
+      _id
+    }
+  }
+`;
+
 
 export const UPLOAD_MUTATION = gql`
   mutation uploadFile($file: Upload!) {

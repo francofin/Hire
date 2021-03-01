@@ -8,6 +8,7 @@ const JobItem = (job) => {
   const {
     image,
     role,
+    upload,
     _id,
     skills,
   } = job;
@@ -15,25 +16,39 @@ const JobItem = (job) => {
   const dispatch = useDispatch();
   const state = useSelector(state => state);
 
-  
-    return (
+  function showJob(image, skills, role, _id, upload) {
+    if (image) {
+      return (
+        <Link to={`/jobs/${_id}`}>
+          <img src={image} className="img-fluid" />
+          <div className="portfolio-info">
+            <h4>{role}</h4>
+            <p>{skills.name}</p>
+          </div>
+        </Link>
+      );
+    } else {
+      return (
+        <Link to={`/jobs/${_id}`}>
+          <img src={upload} className="img-fluid" />
+          <div className="portfolio-info">
+            <h4>{role}</h4>
+            <p>{skills.name}</p>
+          </div>
+        </Link>
+      );
+    }
+  }
 
-      
-            <div className="col-lg-4 col-md-6 portfolio-item filter-app">
-              <Link to={`/jobs/${_id}`}>
-              <img src={image} className="img-fluid" alt="" />
-              <div className="portfolio-info">
-                <h4>{role}</h4>
-                <p>{skills.name}</p>
-           
-              </div>
-              </Link>
-            </div>
-      
+
+  return (
+
+    <div className="col-lg-4 col-md-6 portfolio-item filter-app">
+      {showJob(image, skills, role, _id, upload)}
+    </div>
 
 
-    );
-  };
-  
-  export default JobItem;
-  
+  );
+};
+
+export default JobItem;

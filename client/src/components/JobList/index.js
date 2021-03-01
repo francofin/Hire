@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import SkillMenu from '../SkillMenu';
 import { UPDATE_JOBS } from '../../utils/actions';
 import { useQuery } from '@apollo/react-hooks';
@@ -9,6 +9,8 @@ import spinner from '../../assets/spinner.gif';
 import { idbPromise } from "../../utils/helpers";
 import Header from '../Header';
 import homeimage from "../../assets/images/employeeproduct.jpg";
+import jobpost from "../../assets/images/8lPXfcs8i-python.jpg";
+
 
 
 function JobList()  {
@@ -20,7 +22,17 @@ function JobList()  {
   console.log(currentSkill);
 
   const { loading, data} = useQuery(QUERY_JOBS_BY_SKILL);
-  console.log(loading);
+
+  const [currentupload, setCurrentupload ] = useState({});
+
+
+  useEffect(() => {
+    if (data) {
+      setCurrentupload(data.jobs);
+    }
+  }, [ data, setCurrentupload ]);
+
+
 
   useEffect(() => {
 
@@ -46,19 +58,28 @@ function JobList()  {
 
   }, [ data, loading, dispatch]);
 
-  console.log(currentSkill);
+  console.log(state);
 
 
   function filterJobs() {
     if (!currentSkill) {
-      return state.jobs;
+      return currentupload;
     }
-  
-    return state.jobs.filter(job => job.skills._id === currentSkill);
+
+    return currentupload.jobs.filter(job => job.skills._id === currentSkill);
   }
 
   const imageDisplayed = homeimage;
   const roleDisplayed = "H!red";
+
+  // let imageforjob;
+  // if(currentupload[0]) {
+  //   console.log("state jobs", require(`../../assets/images/${currentupload[0].upload.path.split("/")[5]}`));
+  //    imageforjob = require(`../../assets/images/${currentupload[0].upload.path.split("/")[5]}`).default;
+  // }
+
+ 
+  
 
   return (
     <section style={{margin:0}}>
@@ -70,7 +91,7 @@ function JobList()  {
         </div>
       </div>
 
-      {state.jobs.length ? (
+      {currentupload.length ? (
       <div className="container">
         <div className="row">
           <div className="col-lg-12 d-flex justify-content-center">
@@ -83,6 +104,7 @@ function JobList()  {
               key = {job._id}
               _id = {job._id}
               image= {job.image}
+              upload = {jobpost}
               role = {job.role}
               skills = {job.skills}
               />

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { QUERY_JOBS_BY_SKILL } from "../utils/queries";
 import {useDispatch, useSelector} from 'react-redux';
+import {APPLY} from '../utils/mutations';
 import { idbPromise } from "../utils/helpers";
 import spinner from '../assets/spinner.gif';
 import Header from '../components/Header';
@@ -19,7 +20,10 @@ const JobDetail = () => {
 
   const { id } = useParams();
 
-  const [currentJob, setCurrentJob] = useState({})
+  console.log(id);
+
+  const [currentJob, setCurrentJob] = useState({});
+  const [showJobInterest] = useMutation(APPLY);
 
   const { loading, data } = useQuery(QUERY_JOBS_BY_SKILL);
 
@@ -44,12 +48,26 @@ const JobDetail = () => {
   console.log(currentJob)
 
 
+  const handleApply = async event => {
+    event.preventDefault();
+    
+    await showJobInterest({
+      variables: {
+        id: currentJob._id
+      }
+    });
+
+    console.log("application")
+
+  }
+
+
     return (
       <section style={{margin:0}}>
         <Header 
         image={currentJob.image}
         role = {currentJob.role}
-        skill = {currentJob.skill}
+        skill = {currentJob.skills}
         ></Header>
         <>
       {currentJob ? (
@@ -61,18 +79,20 @@ const JobDetail = () => {
     
             <div className="d-flex justify-content-between align-items-center">
               <h2>Job Details</h2>
+              
               <ol>
                 <li><Link to ="/">Home</Link></li>
                 <li><Link to ="/">User Profile</Link></li>
-               
+                <li></li>
               </ol>
+              
             </div>
     
           </div>
         </section>
         <section className="portfolio-details">
           <div className="container">
-    
+          <button className='btn btn-success' onClick={handleApply}>Apply</button>
             <div className="portfolio-details-container">
   
     

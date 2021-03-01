@@ -35,6 +35,14 @@ export const ADD_JOB = gql`
   }
 `;
 
+export const APPLY = gql`
+mutation showJobInterest($id:ID!){
+  showJobInterest(_id:$id){
+    role
+  }
+}
+`;
+
 
 export const UPLOAD_MUTATION = gql`
   mutation uploadFile($file: Upload!) {

@@ -91,7 +91,6 @@ const resolvers = {
           .populate('jobOffers')
           .populate('applied')
           .populate('matchedJobs')
-          .populate('image')
           .populate('upload')
           .populate('orders');
 
@@ -109,7 +108,6 @@ const resolvers = {
         .populate('applied')
         .populate('matchedJobs')
         .populate('skills')
-        .populate('image')
         .populate('upload');
     },
     user: async (parent, { _id }) => {
@@ -117,7 +115,6 @@ const resolvers = {
         .select('-__v')
         .populate('matchedJobs')
         .populate('skills')
-        .populate('image')
         .populate('upload');
     },
     order: async (parent, { _id }, context) => {
@@ -262,13 +259,20 @@ const resolvers = {
         return job;
       }
     },
-    showJobInterest: async (parent, { jobId }, context) => {
+    showJobInterest: async (parent,  id , context) => {
       if (context.user) {
         const updatedJob = await Jobs.findOneAndUpdate(
-          { _id: jobId },
+          { _id: id },
           { $addToSet: { applicants: context.user._id } },
           { new: true }
         );
+
+        await User.findOneAndUpdate(
+          {_id: context.user._id},
+          {$push : {applied: updatedJob._id}},
+          { new: true }
+        );
+
         return updatedJob;
       }
 

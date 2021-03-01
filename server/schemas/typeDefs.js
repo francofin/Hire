@@ -83,7 +83,7 @@ const typeDefs = gql`
         me: User
         users: [User]
         user(_id: ID!): User
-        job(_id: ID): [Jobs]
+        job(_id: ID): Jobs
         jobs(skills: ID, role:String): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
@@ -100,7 +100,7 @@ const typeDefs = gql`
         login(email: String!, password: String!): Auth
         addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
-        showJobInterest(jobId:ID!): Jobs
+        showJobInterest(_id:ID!): Jobs
         showUserInterest(userId:ID!): User
         addOrder(product: ID!): Order
         uploadFile(file: Upload!): Image!

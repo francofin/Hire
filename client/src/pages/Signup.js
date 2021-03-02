@@ -10,7 +10,7 @@ import { useLazyQuery } from '@apollo/react-hooks';
 import { Link } from "react-router-dom";
 import Header from '../components/Header';
 import Auth from "../utils/auth";
-import homeimage from "/images/employeeproduct.jpg";
+import homeimage from "../assets/images/employeeproduct.jpg";
 
 
 function Signup(props) {

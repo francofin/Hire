@@ -20,7 +20,7 @@ import JobDetail from "./pages/JobDetail";
 import AddJob from "./pages/AddJob";
 import store from "./utils/store";
 const httpLink = createUploadLink({
-  uri: "graphql",
+  uri: "/graphql",
 });
 
 const client = new ApolloClient({

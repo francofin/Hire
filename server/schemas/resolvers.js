@@ -319,7 +319,7 @@ const resolvers = {
         if(userJobs.includes(id._id)) {
             await Jobs.findOneAndDelete({_id:id});
         } else {
-          throw new AuthenticationError('You Can only delete Jobs Posted By you');
+          throw new AuthenticationError('You Can only delete Jobs Posted By');
         }
         
         const updatedUser = await User.findOneAndUpdate(

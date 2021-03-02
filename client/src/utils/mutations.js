@@ -43,6 +43,15 @@ mutation showJobInterest($id:ID!){
 }
 `;
 
+export const DELETE_JOB = gql`
+mutation deleteJob($id:ID!){
+  deleteJob(_id:$id){
+    _id
+    role
+  }
+}
+`;
+
 
 export const UPLOAD_MUTATION = gql`
   mutation uploadFile($file: Upload!) {

@@ -41,15 +41,8 @@ const resolvers = {
     uploads: async (parent, { _id }) => {
       return await Image.findOne(_id);
     },
-    product: async (parent, { name }) => {
-      const params = {};
-      if (name) {
-        params.name = {
-          $regex: name
-        };
-      }
-
-      return await Product.find(params);
+    product: async (parent, { }) => {
+      return await Product.find();
     },
 
     jobs: async (parent, { skills, role }) => {
@@ -314,6 +307,32 @@ const resolvers = {
 
       throw new AuthenticationError('Not logged in');
     },
+    deleteJob: async (parent, id, context) => {
+      if(context.user) {
+
+        
+        const user = await User.findOne({_id:context.user._id});
+        const userJobs = user.jobs;
+
+        console.log(id);
+        
+        if(userJobs.includes(id._id)) {
+            await Jobs.findOneAndDelete({_id:id});
+        } else {
+          throw new AuthenticationError('You Can only delete Jobs Posted By you');
+        }
+        
+        const updatedUser = await User.findOneAndUpdate(
+          {_id: context.user._id},
+          {$pull: {job: id}},
+          {new: true}
+        )
+
+        console.log(updatedUser);
+        return updatedUser;
+      }
+      throw new AuthenticationError('Not logged in');
+    }
 
   }
 };

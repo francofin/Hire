@@ -88,7 +88,7 @@ const typeDefs = gql`
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
         images: [Image]
-        product(_id: ID): Product
+        product: [Product]
         skills: [Skills]
         skill(_id:ID): Skills
         uploads(_id: ID): [Image]
@@ -96,7 +96,7 @@ const typeDefs = gql`
 
     type Mutation {
         addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], upload:ID): Auth
-        updateUser(firstName: String, lastName: String, email: String, password: String, profileText: String, upload:ID): User
+        updateUser( profileText: String, upload:ID): User
         login(email: String!, password: String!): Auth
         addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
@@ -104,6 +104,7 @@ const typeDefs = gql`
         showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
         uploadFile(file: Upload!): Image!
+        deleteJob(_id:ID!): Jobs
     }
 `;
 

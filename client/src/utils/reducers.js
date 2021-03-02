@@ -113,7 +113,7 @@ export const reducers = (state = initialState, action) => {
         case UPDATE_PRODUCT:
             return {
                 ...state,
-                product: [...action.product],
+                product: action.product,
             };
 
         case UPDATE_USER_JOBS:

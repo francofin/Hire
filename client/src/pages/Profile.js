@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, Redirect } from "react-router-dom";
 import { QUERY_USER, QUERY_ME_BASIC, QUERY_PRODUCT } from "../utils/queries";
+import { DELETE_JOB } from "../utils/mutations";
 import { useDispatch, useSelector } from 'react-redux';
-import { useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import Cart from '../components/Cart';
+import { idbPromise } from "../utils/helpers";
 import Auth from '../utils/auth';
 import Header from '../components/Header';
 // import { idbPromise } from "../utils/helpers";
@@ -29,9 +31,12 @@ const Profile = () => {
   const [currentProduct, setCurrentProduct] = useState({});
 
 
-  const { productData } = useQuery(QUERY_PRODUCT);
+  const { data:productData } = useQuery(QUERY_PRODUCT);
 
-  console.log("all products", productData)
+  const [deleteJob] = useMutation(DELETE_JOB);
+
+ 
+
   const [currentupload, setCurrentupload] = useState({});
   // const [currentjobs, setCurrentjob] = useState({});
 
@@ -40,17 +45,14 @@ const Profile = () => {
   });
 
   const user = userData?.me || userData?.user || {};
-  
 
-
-  console.log("navigatedprofile", user.upload===null)
 
   useEffect(() => {
     if (user.upload) {
       setCurrentupload(require(`../assets/images/${userData.me.upload.path.split("/")[5]}`))
       console.log("meconsol", userData.me.upload.path.split("/"));
     }
-    else{
+    else {
       setCurrentupload(user.image);
     }
   }, [userData, setCurrentupload]);
@@ -58,48 +60,57 @@ const Profile = () => {
   useEffect(() => {
     if (userData) {
       dispatch({
-        type:UPDATE_USER_JOBS,
+        type: UPDATE_USER_JOBS,
         user_jobs: user.jobs
       })
     }
   }, [userData, dispatch]);
 
   // useEffect(() => {
-  //   // already in global store
-  //   if (product.length) {
-  //     setCurrentProduct(product.find(item => item._id === id));
-  //   } 
-  //   // retrieved from server
-  //   else if (productData) {
+  //   if(productData) {
   //     dispatch({
   //       type: UPDATE_PRODUCT,
   //       product: productData.product
   //     });
-
-  //     productData.product.forEach((item) => {
-  //       idbPromise('product', 'put', product);
-  //     });
+      
   //   }
-  //   // get cache from idb
-  //   else if (!loading) {
-  //     idbPromise('product', 'get').then((indexedProducts) => {
-  //       dispatch({
-  //         type: UPDATE_PRODUCT,
-  //         product: indexedProducts
-  //       });
-  //     });
-  //   }
-  // }, [product, productData, loading, dispatch]);
+  // }, [productData, dispatch])
 
+  useEffect(() => {
+    // already in global store
+    if (product.length) {
+      setCurrentProduct(product.find(item => item._id === product[0].id));
+    }
+    // retrieved from server
+    else if (productData) {
+      dispatch({
+        type: UPDATE_PRODUCT,
+        product: productData.product
+      });
 
+      productData.product.forEach((item) => {
+        idbPromise('product', 'put', item);
+      });
+    }
+    // get cache from idb
+    else if (!loading) {
+      idbPromise('product', 'get').then((indexedProducts) => {
+        dispatch({
+          type: UPDATE_PRODUCT,
+          product: indexedProducts
+        });
+      });
+    }
+  }, [product, productData, loading, dispatch]);
+
+  console.log("all products", product)
   if (Auth.loggedIn() && Auth.getProfile().data._id === userParam) {
     return <Redirect to="/profile" />;
   }
 
 
   // const addToCart = () => {
-  //   const itemInCart = cart.find((cartItem) => cartItem._id === id)
-
+  //   const itemInCart = cart.find((cartItem) => cartItem._id === product[0].id)
   //   if (itemInCart) {
   //     dispatch({
   //       type: UPDATE_CART_QUANTITY,
@@ -109,7 +120,7 @@ const Profile = () => {
   //     // if we're updating quantity, use existing item data and increment purchaseQuantity value by one
   //     idbPromise('cart', 'put', {
   //       ...itemInCart,
-  //       purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 1
+  //       purchaseQuantity: parseInt(itemInCart.purchaseQuantity) + 0
   //     });
   //   } else {
   //     dispatch({
@@ -119,22 +130,52 @@ const Profile = () => {
   //     // if product isn't in the cart yet, add it to the current shopping cart in IndexedDB
   //     idbPromise('cart', 'put', { ...currentProduct });
   //   }
+  // }
 
-let imageRendered
-try {
-  if(currentupload.default) {
-    imageRendered = currentupload.default
+  const removeUserJob = async event => {
+    event.preventDefault();
+
+    await deleteJob({
+      variables: {
+        id: event.target.getAttribute("data-id")
+      }
+    })
+    // console.log(user)
+
+    window.location.assign("/profile");
+  };
+  let imageRendered
+  try {
+    if (currentupload.default) {
+      imageRendered = currentupload.default
+    }
+    else {
+      imageRendered = currentupload;
+    }
   }
-  else{
-    imageRendered = currentupload;
+  catch (e) {
+    console.log(e)
   }
-}
-catch(e) {
-  console.log(e)
-}
-  
+
   console.log("rnedered", user);
   console.log("rnedered", currentupload);
+
+  // const editProfile = async (event) => {
+  //   event.preventDefault();
+
+  //   var text = $
+  // }
+
+  // $(".list-group").on("click", "p", function() {
+  //   var text = $(this)
+  //     .text()
+  //     .trim();
+  //   var textInput = $("<textarea>")
+  //   .addClass("form-control")
+  //   .val(text);
+  //   $(this).replaceWith(textInput);
+  //   textInput.trigger("focus");
+  // });
 
 
   return (
@@ -142,14 +183,16 @@ catch(e) {
     <section style={{ margin: 0 }}>
 
       <Header
-       image={imageRendered}
+        image={imageRendered}
         firstName={user.firstName}
         lastName={user.lastName}
         role=''
       ></Header>
       <main id="main">
-        <section className="breadcrumbs" style={{marginBottom:40}}>
+        <section className="breadcrumbs" style={{ marginBottom: 40 }}>
           <div className="container">
+
+          
 
             <div className="d-flex justify-content-between align-items-center">
               <h2>Portfolio Details</h2>
@@ -166,20 +209,20 @@ catch(e) {
         <section className="portfolio-details" >
           <div className="container">
 
-            <div className="portfolio-details-container"style={{paddingTop:40}}>
+            <div className="portfolio-details-container" style={{ paddingTop: 40 }}>
 
               <div className="row">
                 <div className="col-md-3">
                   <div className="portfolio-info">
                     <h3>Current Listed Jobs</h3>
                     <ul>
-                      {user_jobs.map(job => ( 
-                       <li key={job._id}>{job.role}</li> 
-                        ))}
+                      {user_jobs.map(job => (
+                        <li key={job._id}> {job.role} <Link ><span title="Delete Job" style={{fontFamily:"helvetica"}}><i onClick={removeUserJob} data-id= {job._id} className="fas fa-minus-circle"  style={{color:"red"}} ></i></span></Link></li>
+                      ))}
                     </ul>
                   </div>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-5">
                   <div className="portfolio-info">
                     <h3>Current Job Offers</h3>
                     <ul>
@@ -196,8 +239,9 @@ catch(e) {
                     </ul>
                   </div>
                 </div>
-                <div className="col-md-11">
+                <div className="col-md-12">
                   <div className="portfolio-info">
+                  <button className="btn btn-success" style={{marginbottom:20}}>Get Premium</button>
                     <h3>Current Job Offers</h3>
                     <ul>
                       {/* {offers.map(offer => ( */}
@@ -219,9 +263,10 @@ catch(e) {
 
             </div>
 
-            <div className="portfolio-description" style={{paddingTop:150}}>
+            <div className="portfolio-description" style={{ paddingTop: 150 }}>
               <h2>About {user.firstName} {user.lastName}</h2>
               <p>
+              <Link><span title="Edit Profile" style={{fontFamily:"helvetica"}}><i className="far fa-edit" user-edit-button="editUserProfile" style={{color:"blue"}} ></i></span></Link>
                 {user.profileText}
               </p>
             </div>

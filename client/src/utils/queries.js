@@ -168,8 +168,6 @@ export const QUERY_IMAGE = gql`
   } 
 `;
 
-
-
 export const QUERY_ALL_JOBS = gql`
   {
     jobs {
@@ -195,14 +193,14 @@ export const QUERY_CHECKOUT = gql`
 `;
 
 export const QUERY_PRODUCT = gql`
-{
+query {
   product {
     _id
     name
     description
     price
     quantity
-  }
+  }  
 }
 `;
 

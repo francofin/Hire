@@ -29,7 +29,8 @@ app.use(express.json());
 app.use(cors('*'));
 
 // Serve up static assets
-app.use('/images', express.static(path.join(__dirname, '../client/images')));
+// app.use('/images', express.static(path.join(__dirname, '../client/images')));
+app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {

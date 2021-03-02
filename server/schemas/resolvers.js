@@ -7,7 +7,7 @@ const shortid = require('shortid');
 
 const storeUpload = async ({stream, filename, mimetype}  ) => {
   const id = shortid.generate();
-  const path = `../client/src/assets/images/${id}-${filename}`;
+  const path = `../../client/build/images/${id}-${filename}`;
 
   return new Promise((resolve, reject) =>{
     stream

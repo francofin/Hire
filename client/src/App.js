@@ -19,9 +19,7 @@ import About from "./pages/About";
 import JobDetail from "./pages/JobDetail";
 import AddJob from "./pages/AddJob";
 import store from "./utils/store";
-const httpLink = createUploadLink({
-  uri: "/graphql",
-});
+
 
 const client = new ApolloClient({
   request: operation => {
@@ -33,7 +31,7 @@ const client = new ApolloClient({
     });
   },
   cache: new InMemoryCache(),
-  link: httpLink,
+  link: createUploadLink({uri: "/graphql"})
 });
 
 function App() {

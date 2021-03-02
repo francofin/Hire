@@ -7,7 +7,7 @@ const shortid = require('shortid');
 
 const storeUpload = async ({stream, filename, mimetype}  ) => {
   const id = shortid.generate();
-  const path = `../client/build/images/${id}-${filename}`;
+  const path = `../client/src/assets/images/${id}-${filename}`;
 
   return new Promise((resolve, reject) =>{
     stream
@@ -319,7 +319,7 @@ const resolvers = {
         if(userJobs.includes(id._id)) {
             await Jobs.findOneAndDelete({_id:id});
         } else {
-          throw new AuthenticationError('You Can only delete Jobs Posted By');
+          throw new AuthenticationError('You Can only delete Jobs Posted');
         }
         
         const updatedUser = await User.findOneAndUpdate(

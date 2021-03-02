@@ -34,7 +34,6 @@ const client = new ApolloClient({
   },
   cache: new InMemoryCache(),
   link: httpLink,
-  // uri: "/graphql",
 });
 
 function App() {

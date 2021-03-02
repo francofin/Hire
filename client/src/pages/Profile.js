@@ -49,7 +49,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user.upload) {
-      setCurrentupload(userData.me.upload.path.split("/")[5])
+      setCurrentupload(require(`../assets/images/${userData.me.upload.path.split("/")[5]}`))
       console.log("meconsol", userData.me.upload.path.split("/"));
     }
     else {
@@ -183,7 +183,7 @@ const Profile = () => {
     <section style={{ margin: 0 }}>
 
       <Header
-        image={`/images/${imageRendered}`}
+        image={imageRendered}
         firstName={user.firstName}
         lastName={user.lastName}
         role=''

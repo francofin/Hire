@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(cors('*'));
 
 // Serve up static assets
-app.use('/images', express.static(path.join(__dirname, '../client/public/images')));
+app.use('/images', express.static(path.join(__dirname, '../client/build/images')));
 
 // app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 // Serve up static assets

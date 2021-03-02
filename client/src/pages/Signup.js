@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/react-hooks";
+import { useMutation } from "@apollo/client";
 import { ADD_USER, UPLOAD_MUTATION } from "../utils/mutations";
 import { UPDATE_SKILLS, UPDATE_IMAGE } from "../utils/actions";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 import { QUERY_SKILLS, QUERY_IMAGE } from "../utils/queries";
 import { useDispatch, useSelector } from "react-redux";
 import { useDropzone } from 'react-dropzone';
-import { useLazyQuery } from '@apollo/react-hooks';
 import { Link } from "react-router-dom";
 import Header from '../components/Header';
 import Auth from "../utils/auth";

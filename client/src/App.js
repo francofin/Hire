@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient from "apollo-boost-upload";
+import { ApolloProvider } from "@apollo/client";
+import {ApolloClient} from "@apollo/client";
 import {createUploadLink} from 'apollo-upload-client';
-import { InMemoryCache} from 'apollo-cache-inmemory';
+
+import { InMemoryCache} from '@apollo/client';
 // import { StoreProvider } from "./utils/GlobalState";
 import { Provider } from "react-redux";
 import Footer from "./components/Footer";
@@ -15,23 +16,29 @@ import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import { setContext } from '@apollo/client/link/context';
 
 import JobDetail from "./pages/JobDetail";
 import AddJob from "./pages/AddJob";
 import store from "./utils/store";
+const uploadLink = createUploadLink({uri: "/graphql"});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem("id_token");
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  }
+});
 
 
 const client = new ApolloClient({
-  request: operation => {
-    const token = localStorage.getItem("id_token");
-    operation.setContext({
-      headers: {
-        authorization: token ? `Bearer ${token}` : "",
-      },
-    });
-  },
+
   cache: new InMemoryCache(),
-  link: createUploadLink({uri: "/graphql"})
+  link: authLink.concat(uploadLink)
 });
 
 function App() {

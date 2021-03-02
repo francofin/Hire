@@ -3,7 +3,7 @@ import { Link, useParams, Redirect } from "react-router-dom";
 import { QUERY_USER, QUERY_ME_BASIC, QUERY_PRODUCT } from "../utils/queries";
 import { DELETE_JOB } from "../utils/mutations";
 import { useDispatch, useSelector } from 'react-redux';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import Cart from '../components/Cart';
 import { idbPromise } from "../utils/helpers";
 import Auth from '../utils/auth';
@@ -32,6 +32,7 @@ const Profile = () => {
 
 
   const { data:productData } = useQuery(QUERY_PRODUCT);
+
 
   const [deleteJob] = useMutation(DELETE_JOB);
 
@@ -157,7 +158,7 @@ const Profile = () => {
     console.log(e)
   }
 
-  console.log("rnedered", user);
+  console.log("rnedered", userData);
   console.log("rnedered", currentupload);
 
   // const editProfile = async (event) => {
@@ -217,7 +218,7 @@ const Profile = () => {
                     <h3>Current Listed Jobs</h3>
                     <ul>
                       {user_jobs.map(job => (
-                        <li key={job._id}> {job.role} <Link ><span title="Delete Job" style={{fontFamily:"helvetica"}}><i onClick={removeUserJob} data-id= {job._id} className="fas fa-minus-circle"  style={{color:"red"}} ></i></span></Link></li>
+                        <li key={job._id}> {job.role} <Link to="/" ><span title="Delete Job" style={{fontFamily:"helvetica"}}><i onClick={removeUserJob} data-id= {job._id} className="fas fa-minus-circle"  style={{color:"red"}} ></i></span></Link></li>
                       ))}
                     </ul>
                   </div>
@@ -266,7 +267,7 @@ const Profile = () => {
             <div className="portfolio-description" style={{ paddingTop: 150 }}>
               <h2>About {user.firstName} {user.lastName}</h2>
               <p>
-              <Link><span title="Edit Profile" style={{fontFamily:"helvetica"}}><i className="far fa-edit" user-edit-button="editUserProfile" style={{color:"blue"}} ></i></span></Link>
+              <Link to="/"><span title="Edit Profile" style={{fontFamily:"helvetica"}}><i className="far fa-edit" user-edit-button="editUserProfile" style={{color:"blue"}} ></i></span></Link>
                 {user.profileText}
               </p>
             </div>

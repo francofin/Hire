@@ -31,17 +31,15 @@ app.use(cors('*'));
 // Serve up static assets
 // app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-
+app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
 
-app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 
-app.get("/service-worker.js", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "service-worker.js"));
-});
+
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));

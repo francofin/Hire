@@ -1,14 +1,15 @@
 const express = require('express');
-const db = requrie('./config/connection');
+const {ApolloServer} = require('apollo-server-express');
 
 const {resolvers, typeDefs} = require('./schemas');
+const db = require('./config/connection');
+const cors = require('cors');
+const { authMiddleware } = require('./utils/auth');
 
-const {authMiddleWare} = require('./utils/auth');
 
-const {ApolloServer} = require('apollo-server-express');
-const { urlencoded } = require('express');
 
-const path = requrie('path');
+
+const path = require('path');
 
 const PORT = process.env.PORT || 3001;
 
@@ -17,7 +18,7 @@ const app = express();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: authMiddleWare
+    context: authMiddleware
 });
 //new server data 
 server.applyMiddleware({app});
@@ -25,7 +26,8 @@ server.applyMiddleware({app});
 app.use(express.urlencoded({extended: false}));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'profile-images')));
+app.use(express.static(path.join(__dirname, './images')));
+app.use(cors('*'));
 
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {

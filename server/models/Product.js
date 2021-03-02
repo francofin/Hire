@@ -21,8 +21,8 @@ const productSchema = new Schema({
   },
   quantity: {
     type: Number,
-    max: 1,
-    default: 1
+    min: 0,
+    default: 0
   },
 });
 

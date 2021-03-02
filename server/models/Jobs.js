@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const dateFormat = require('../utils/dateFormat');
-const interestSchema = require('./Interested');
 const { Schema } = mongoose;
+const dateFormat = require('../utils/dateFormat');
 
 const jobSchema = new Schema({
-  companyName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  role: {
+  email: {
     type: String,
     required: true,
     trim: true
@@ -18,7 +12,7 @@ const jobSchema = new Schema({
     type: String,
     required: true,
     required: 'Please Create Your Profile',
-    minlength: 5000,
+    minlength: 30,
     maxlength: 280000
   },
   createdAt: {
@@ -29,21 +23,54 @@ const jobSchema = new Schema({
   image: {
     type: String
   },
-  category: {
+  upload: {
     type: Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: "Image"
+  },
+  positionFilled: {
+    type: Boolean,
+    required: true,
+    default: false
+  },
+  role:{
+    type:String,
     required: true
   },
-  interests: [interestSchema]
-},
-  {
-    toJSON: {
-      getters: true
-    }
-  });
+  skills: {
+    type: Schema.Types.ObjectId,
+    ref: 'Skills',
+    required: true
+  },
+  applicants: [
+    {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }
+],
+  candidates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+  matchedCandidates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  }],
+}, {
+  toJSON: {
+    getters: true
+  }
+});
 
-jobSchema.virtual('interestCount').get(function () {
-  return this.interests.length;
+jobSchema.virtual('applicantCount').get(function () {
+  return this.applicants.length;
+});
+
+jobSchema.virtual('candidateCount').get(function () {
+  return this.candidates.length;
+});
+
+jobSchema.virtual('matchCount').get(function () {
+  return this.matchedCandidates.length;
 });
 
 const Jobs = mongoose.model('Jobs', jobSchema);

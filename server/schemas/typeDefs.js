@@ -1,47 +1,36 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
-    type Category {
+    type Skills {
         _id: ID
-        name: String
+        name: String!
+    }
+
+    type Image {
+        id: ID!
+        filename: String!
+        mimetype: String!
+        path: String!
     }
 
     type Jobs {
         _id: ID
-        companyName: String
+        email: String
         description: String
         createdAt: String
+        image: String
+        positionFilled: Boolean
+        skills: Skills
+        upload: Image
         role: String
-        image: String
-        category: Category
-        interestCount: Int
-        interests: [Interestd]
-    }
-
-    type Interested {
-        _id: ID
-        email: String
-        createdAt: String
-        interestShown: Boolean
-    }
-
-    type User {
-        _id: ID
-        firstName: String
-        lastName: String
-        email: String
-        jobs: [Jobs]
-        jobCount: Int
-        profile: Profile
-        orders: Order
-    }
-
-    type Profile {
-        _id: ID
-        profiletext: String
-        createdAt: String
-        email: String
-        image: String
+        userInterestCount: Int
+        matchCount: Int
+        applicants: [User]
+        applicantCount: Int
+        candidates: [User]
+        candidateCount: Int
+        matchedCandidates: [User]
+        
     }
 
     type Order {
@@ -58,59 +47,65 @@ const typeDefs = gql`
         quantity: Int
     }
 
-    type Employer {
-        id:ID
+    type User {
+        _id: ID
         firstName: String
         lastName: String
-        companyName: String
         email: String
-        profile: Profile
-        orders: Order
-        candidates: [User]
+        password: String
+        profileText: String
+        image: String
+        upload: Image
+        applied: [Jobs]
+        jobOffers: [Jobs]
+        matchedJobs:[Jobs]
+        skills: Skills
         jobs: [Jobs]
-        candidateCount: Int
         jobCount: Int
+        offerCount: Int
+        matchedJobCount: Int
+        skillCount: Int
+        orders: Order
     }
 
-    type AuthUser {
+    type Checkout {
+        session: ID
+      }
+
+
+    type Auth {
         token: ID!
         user: User
     }
 
-    type AuthEmployer {
-        token: ID!
-        employer: Employer
-    }
 
     type Query {
         me: User
-        company: Employer
         users: [User]
-        employers: [Employer]
-        user(email: String!): User
-        employer(companyName: String!): Employer
-        job(category: ID, companyName: String): [Jobs]
-        jobs: [Jobs]
+        user(_id: ID!): User
+        job(_id: ID): Jobs
+        jobs(skills: ID, role:String): [Jobs]
         order(_id: ID!): Order
         checkout(product: ID!): Checkout
-        product(_id: ID!): Product
-        categories: [Category]
-        userProfile(email:String!): Profile
+        images: [Image]
+        product: [Product]
+        skills: [Skills]
+        skill(_id:ID): Skills
+        uploads(_id: ID): [Image]
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String! ): AuthUser
-        addEmployer(firstName: String!, lastName:String!, companyName: String!, email:String!, password: String!): AuthEmployer
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], upload:ID): Auth
+        updateUser( profileText: String, upload:ID): User
+        login(email: String!, password: String!): Auth
+        addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
+        updateJob(description: String, positionFilled:Boolean!): Jobs
+        showJobInterest(_id:ID!): Jobs
+        showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
-        addProfile(profiletext: String!, email:String!, image:String!): Profile
-        addJob(companyName: String!, role:String!, description: String!, image:String!, category:String!): Jobs
-        updateUser(firstName: String, lastName: String, email: String, password: String): User
-        loginUser(email: String!, password: String!): AuthUser
-        loginEmployer(email: String!, password: String!): AuthEmployer
+        uploadFile(file: Upload!): Image!
+        deleteJob(_id:ID!): Jobs
     }
-
-
-
 `;
 
 

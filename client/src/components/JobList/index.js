@@ -8,8 +8,8 @@ import JobItem from "../JobItem";
 import spinner from '../../assets/spinner.gif';
 import { idbPromise } from "../../utils/helpers";
 import Header from '../Header';
-import homeimage from "../../assets/images/employeeproduct.jpg";
-import jobpost from "../../assets/images/8lPXfcs8i-python.jpg";
+import homeimage from "/images/employeeproduct.jpg";
+import jobpost from "/images/k3X9MS6FR-python.jpg";
 
 
 

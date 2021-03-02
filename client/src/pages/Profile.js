@@ -49,7 +49,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (user.upload) {
-      setCurrentupload(require(`../assets/images/${userData.me.upload.path.split("/")[5]}`))
+      setCurrentupload(require(`/images/${userData.me.upload.path.split("/")[5]}`))
       console.log("meconsol", userData.me.upload.path.split("/"));
     }
     else {

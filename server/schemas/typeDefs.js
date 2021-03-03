@@ -1,6 +1,9 @@
 const {gql} = require('apollo-server-express');
 
 const typeDefs = gql`
+
+    scalar FileUpload
+
     type Skills {
         _id: ID
         name: String!
@@ -103,7 +106,7 @@ const typeDefs = gql`
         showJobInterest(_id:ID!): Jobs
         showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
-        uploadFile(file: Upload!): Image!
+        uploadFile(file: FileUpload!): Image!
         deleteJob(_id:ID!): Jobs
     }
 `;

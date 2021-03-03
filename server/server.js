@@ -1,7 +1,6 @@
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
 const {graphqlUploadExpress } = require('graphql-upload');
-
 const {resolvers, typeDefs} = require('./schemas');
 const db = require('./config/connection');
 const cors = require('cors');
@@ -20,7 +19,7 @@ const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: authMiddleware,
-    uploads: false
+    // uploads: false
 });
 //new server data 
 server.applyMiddleware({app});
@@ -33,7 +32,7 @@ app.use(cors('*'));
 // Serve up static assets
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-app.use(graphqlUploadExpress({maxFileSize: 2000000000, maxFiles: 10}));
+// app.use(graphqlUploadExpress({maxFileSize: 2000000000, maxFiles: 10}));
 
 // app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 // Serve up static assets

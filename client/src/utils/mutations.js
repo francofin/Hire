@@ -54,7 +54,7 @@ mutation deleteJob($id:ID!){
 
 
 export const UPLOAD_MUTATION = gql`
-  mutation uploadFile($file: Upload!) {
+  mutation uploadFile($file: FileUpload!) {
     uploadFile(file: $file) {
       id
       filename

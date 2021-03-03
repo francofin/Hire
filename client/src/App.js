@@ -21,7 +21,7 @@ import { setContext } from '@apollo/client/link/context';
 import JobDetail from "./pages/JobDetail";
 import AddJob from "./pages/AddJob";
 import store from "./utils/store";
-const uploadLink = createUploadLink({uri: "/graphql"});
+const uploadLink = createUploadLink({uri: "/graphql", credentials: 'same-origin'});
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

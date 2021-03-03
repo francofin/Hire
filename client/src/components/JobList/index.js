@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SkillMenu from '../SkillMenu';
 import { UPDATE_JOBS } from '../../utils/actions';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { QUERY_JOBS_BY_SKILL} from "../../utils/queries";
 import { useDispatch, useSelector } from 'react-redux';
 import JobItem from "../JobItem";

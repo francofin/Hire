@@ -32,7 +32,7 @@ app.use(cors('*'));
 // Serve up static assets
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
-// app.use(graphqlUploadExpress({maxFileSize: 2000000000, maxFiles: 10}));
+app.use(graphqlUploadExpress({maxFileSize: 2000000000, maxFiles: 10}));
 
 // app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 // Serve up static assets

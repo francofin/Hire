@@ -4,7 +4,7 @@ const { signToken } = require('../utils/auth');
 const {createWriteStream, mkdir} = require('fs');
 const stripe = require('stripe')(process.env.STRIPE);
 const shortid = require('shortid');
-const { GraphQLUpload } = require('apollo-server');
+const { graphqlUploadExpress } = require('graphql-upload');
 const storeUpload = async ({stream, filename, mimetype}  ) => {
   const id = shortid.generate();
   const path = `../client/src/assets/images/${id}-${filename}`;
@@ -28,7 +28,7 @@ const processUpload = async (upload) => {
 };
 
 const resolvers = {
-  FileUpload: GraphQLUpload, 
+  FileUpload: graphqlUploadExpress, 
   Query: {
     skills: async (parent, {}) => {
       return await Skills.find();

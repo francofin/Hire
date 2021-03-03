@@ -1,5 +1,6 @@
 const express = require('express');
 const {ApolloServer} = require('apollo-server-express');
+const gql_upload = require('graphql-upload');
 
 const {resolvers, typeDefs} = require('./schemas');
 const db = require('./config/connection');
@@ -18,7 +19,8 @@ const app = express();
 const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: authMiddleware
+    context: authMiddleware,
+    uploads: false
 });
 //new server data 
 server.applyMiddleware({app});
@@ -31,12 +33,13 @@ app.use(cors('*'));
 // Serve up static assets
 app.use('/images', express.static(path.join(__dirname, '../client/images')));
 
+app.use(gql_upload({maxFileSize: 2000000000, maxFiles: 10}));
+
 // app.use('/images', express.static(path.join(__dirname, '../client/static/media')));
 // Serve up static assets
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));
 }
-
 
 
 app.get('*', (req, res) => {

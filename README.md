@@ -1,5 +1,9 @@
 # H!red
   ![GitHub license](https://img.shields.io/badge/license-GPL_3.0-blue.svg)
+  
+  ## Collaborators:
+  - Sterlyn Kong
+  - Francois Jack
 
   ## Description:
   A REACT application which  allows users to match apply and post jobs based on required skills.

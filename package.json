@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "application for mathcing users and jobs",
   "main": "server.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "cd server && npm start",
@@ -15,6 +18,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/francofin/Hire.git"
+  },
+  "resolutions": {
+    "fs-capacitor": "^5.0.0"
   },
   "author": "",
   "license": "ISC",

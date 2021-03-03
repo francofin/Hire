@@ -164,10 +164,10 @@ const resolvers = {
   Mutation: {
 
     uploadFile: async ( parent, {file} ) => {
-      // console.log(file);
-      // mkdir('images', { recursive: true }, (err) => {
-      //   if (err) throw err;
-      // });
+      console.log(file);
+      mkdir('images', { recursive: true }, (err) => {
+        if (err) throw err;
+      });
 
      
       const upload = await processUpload(file);

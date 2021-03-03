@@ -22,57 +22,57 @@ function Signup(props) {
   const [file, setFile] = useState({});
 
   
-  const [uploadFile, {data: mutationData}] = useMutation(UPLOAD_MUTATION, {
-    refetchQueries: [{query: QUERY_IMAGE}]
-  });
+  // const [uploadFile, {data: mutationData}] = useMutation(UPLOAD_MUTATION, {
+  //   refetchQueries: [{query: QUERY_IMAGE}]
+  // });
 
   // const {  data:imageData } = useQuery(QUERY_IMAGE);
   // console.log("images uploaded", imageData);
 
-  if(mutationData){
-    console.log(mutationData.uploadFile.id);
-  };
+  // if(mutationData){
+  //   console.log(mutationData.uploadFile.id);
+  // };
   
 
-  const handleUpload = async (event) => {
-    event.preventDefault();
-    if (file) {
-      console.log("filesssss", file)
-      uploadFile({
-        variables:  {file }
-      });
+  // const handleUpload = async (event) => {
+  //   event.preventDefault();
+  //   if (file) {
+  //     console.log("filesssss", file)
+  //     uploadFile({
+  //       variables:  {file }
+  //     });
 
 
-      setFile({})
-    };
+  //     setFile({})
+  //   };
   
-    return file;
-  };
+  //   return file;
+  // };
   
 
 
-  const {getRootProps, getInputProps} = useDropzone({
-    accept: 'image/*',
-    onDrop: acceptedFile => {
-    setFile(
-      Object.assign(acceptedFile[0], {
-        preview: URL.createObjectURL(acceptedFile[0]),
-      })
-    );
-    console.log("aacepted", acceptedFile);
-    }
-  });
+  // const {getRootProps, getInputProps} = useDropzone({
+  //   accept: 'image/*',
+  //   onDrop: acceptedFile => {
+  //   setFile(
+  //     Object.assign(acceptedFile[0], {
+  //       preview: URL.createObjectURL(acceptedFile[0]),
+  //     })
+  //   );
+  //   console.log("aacepted", acceptedFile);
+  //   }
+  // });
 
-  const thumbs = 
-    <div className='thumb' key={file.name}>
-      <div className='thumb-inner'>
-        <img src={file.preview} className='img' alt={file.length && "img"} />
-      </div>
-    </div>
+  // const thumbs = 
+  //   <div className='thumb' key={file.name}>
+  //     <div className='thumb-inner'>
+  //       <img src={file.preview} className='img' alt={file.length && "img"} />
+  //     </div>
+  //   </div>
 
-    useEffect(() => () => {
-        URL.revokeObjectURL(file.preview)
-    }, [file]);
+  //   useEffect(() => () => {
+  //       URL.revokeObjectURL(file.preview)
+  //   }, [file]);
 
 
 
@@ -114,7 +114,7 @@ function Signup(props) {
       variables: {
         email: formState.email, password: formState.password,
         firstName: formState.firstName, lastName: formState.lastName, 
-        profileText: formState.profileText, skills: formState.skills, upload: mutationData.uploadFile.id
+        profileText: formState.profileText, skills: formState.skills
       }
     });
     const token = mutationResponse.data.addUser.token;
@@ -219,7 +219,7 @@ function Signup(props) {
                     </div>
                   </div>
 
-                  <section className='container'>
+                  {/* <section className='container'>
                     <div {...getRootProps({ className: 'dropzone' })}>
                       <input {...getInputProps()} />
                       <p>Drag 'n' drop some file here, or click to select file</p>
@@ -235,7 +235,7 @@ function Signup(props) {
                         Upload
                       </button>
                     </aside>
-                  </section>
+                  </section> */}
                   {/* 
                   <div className="col-lg-12" style={{ paddingBottom: 20 }}>
                     <div className="input-group">

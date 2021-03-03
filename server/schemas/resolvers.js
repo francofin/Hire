@@ -110,7 +110,8 @@ const resolvers = {
         .populate('skills')
         .populate('jobs')
         .populate('jobOffers')
-        .populate('upload');
+        .populate('upload')
+        .populate('applied');
     },
     order: async (parent, { _id }, context) => {
       if (context.user) {
@@ -162,19 +163,19 @@ const resolvers = {
   },
   Mutation: {
 
-    uploadFile: async ( parent, {file} ) => {
-      console.log(file);
-      mkdir('images', { recursive: true }, (err) => {
-        if (err) throw err;
-      });
+    // uploadFile: async ( parent, {file} ) => {
+    //   console.log(file);
+    //   mkdir('images', { recursive: true }, (err) => {
+    //     if (err) throw err;
+    //   });
 
      
-      const upload = await processUpload(file);
-      // console.log(upload);
-      const uploadedFile = await Image.create(upload);
-      console.log("uploaded file", uploadedFile);
-      return uploadedFile;
-    },
+    //   const upload = await processUpload(file);
+    //   // console.log(upload);
+    //   const uploadedFile = await Image.create(upload);
+    //   console.log("uploaded file", uploadedFile);
+    //   return uploadedFile;
+    // },
     addUser: async (parent, args) => {
 
         // console.log(args);
@@ -184,8 +185,7 @@ const resolvers = {
           email: args.email,
           password: args.password,
           profileText: args.profileText,
-          skills: args.skills,
-          upload: args.upload
+          skills: args.skills
         });
         const token = signToken(user);
 
@@ -227,8 +227,7 @@ const resolvers = {
           email: args.email,
           description: args.description,
           role: args.role,
-          skills: args.skills,
-          upload: args.upload
+          skills: args.skills
         });
 
         console.log(job);

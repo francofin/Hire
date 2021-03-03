@@ -95,15 +95,14 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID], upload:ID): Auth
-        updateUser( profileText: String, upload:ID): User
+        addUser(firstName: String!, lastName:String!, email:String!, password: String!, profileText: String, skills: [ID]): Auth
+        updateUser( profileText: String): User
         login(email: String!, password: String!): Auth
-        addJob(email: String, description: String!, skills:[ID], role:String!, upload:ID): Jobs
+        addJob(email: String, description: String!, skills:[ID], role:String!): Jobs
         updateJob(description: String, positionFilled:Boolean!): Jobs
         showJobInterest(_id:ID!): Jobs
         showUserInterest(userId:ID!, jobId:ID!): User
         addOrder(product: ID!): Order
-        uploadFile(file: Upload!): Image!
         deleteJob(_id:ID!): Jobs
     }
 `;

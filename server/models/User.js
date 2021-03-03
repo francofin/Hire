@@ -39,10 +39,10 @@ const userSchema = new Schema({
   image: {
     type: String
   },
-  upload: {
-    type: Schema.Types.ObjectId,
-    ref: "Image"
-  },
+  // upload: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "Image"
+  // },
   orders: [Order.schema],
   jobOffers: [
     {

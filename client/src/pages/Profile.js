@@ -158,8 +158,7 @@ const Profile = () => {
     console.log(e)
   }
 
-  console.log("rnedered", userData);
-  console.log("rnedered", currentupload);
+
 
   // const editProfile = async (event) => {
   //   event.preventDefault();
@@ -178,17 +177,16 @@ const Profile = () => {
   //   textInput.trigger("focus");
   // });
 
-
   return (
 
     <section style={{ margin: 0 }}>
 
-      <Header
+      {/* <Header
         image={imageRendered}
         firstName={user.firstName}
         lastName={user.lastName}
         role=''
-      ></Header>
+      ></Header> */}
       <main id="main">
         <section className="breadcrumbs" style={{ marginBottom: 40 }}>
           <div className="container">

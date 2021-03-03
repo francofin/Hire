@@ -14,6 +14,7 @@ const typeDefs = gql`
         filename: String!
         mimetype: String!
         path: String!
+        uri: String!
     }
 
     type Jobs {

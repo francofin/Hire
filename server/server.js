@@ -1,10 +1,11 @@
 const express = require('express');
+const { authMiddleware } = require('./utils/auth');
 const {ApolloServer} = require('apollo-server-express');
 const {graphqlUploadExpress } = require('graphql-upload');
 const {resolvers, typeDefs} = require('./schemas');
 const db = require('./config/connection');
 const cors = require('cors');
-const { authMiddleware } = require('./utils/auth');
+
 
 
 

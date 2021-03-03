@@ -20,7 +20,7 @@ const storeUpload = async ({stream, filename, mimetype}  ) => {
 };
 
 const processUpload = async (upload) => {
-  const {createReadStream, mimetype, filename } = await upload;
+  const {createReadStream, mimetype, filename, encoding } = await upload;
   const stream = createReadStream();
   // console.log("stream", stream);
   const file = await storeUpload( {stream, filename, mimetype });

@@ -12,6 +12,9 @@ const imageSchema = new Schema({
     },
     path: {
         type: String
+    },
+    uri: {
+        type: String
     }
 });
 
